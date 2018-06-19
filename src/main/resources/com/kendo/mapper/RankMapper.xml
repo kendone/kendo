@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kendo.mapper.RankMapper">
+
+    <!-- RANK INSERT -->
+
+    <insert id="insert" parameterType="rank" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sys_rank
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            ID, NAME, SORT, IS_VALID,
+            INFO, CREATE_ID, REMARK
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            #{name,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER},
+            #{isValid,jdbcType=TINYINT}, #{info,jdbcType=VARCHAR},
+            #{createUser.id,jdbcType=INTEGER},#{remark,jdbcType=VARCHAR}
+        </trim>
+    </insert>
+
+    <insert id="insertIgnoreNull" parameterType="rank" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sys_rank
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="@com.kendo.util.StringUtils@isNotEmpty(name)">NAME,</if>
+            <if test="sort!=null">SORT,</if>
+            <if test="isValid!=null">IS_VALID,</if>
+            <if test="@com.kendo.util.StringUtils@isNotEmpty(info)">INFO,</if>
+            <if test="createUser!=null">CREATE_ID,</if>
+            <if test="@com.kendo.util.StringUtils@isNotEmpty(remark)">REMARK</if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="@com.kendo.util.StringUtils@isNotEmpty(name)">#{name,jdbcType=VARCHAR},</if>
+            <if test="sort!=null">#{sort,jdbcType=INTEGER},</if>
+            <if test="isValid!=null">#{isValid,jdbcType=TINYINT},</if>
+            <if test="@com.kendo.util.StringUtils@isNotEmpty(info)">#{info,jdbcType=VARCHAR},</if>
+            <if test="createUser!=null">#{createUser.id,jdbcType=INTEGER},</if>
+            <if test="@com.kendo.util.StringUtils@isNotEmpty(remark)">#{remark,jdbcType=VARCHAR}</if>
+        </trim>
+    </insert>
+
+    <!-- RANK UPDATE -->
+
+    <update id="update" parameterType="rank">
+        UPDATE sys_rank
+        <trim prefix="SET ">
+            NAME = #{name,jdbcType=VARCHAR},
+            SORT = #{sort,jdbcType=INTEGER},
+            IS_VALID = #{isValid,jdbcType=TINYINT},
+            INFO = #{info,jdbcType=VARCHAR},
+            REMARK = #{remark,jdbcType=VARCHAR}
+        </trim>
+        WHERE ID = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateIgnoreNull" parameterType="rank">
+        UPDATE sys_rank
+        <trim prefix="SET " suffixOverrides=",">
+            <if test="@com.kendo.util.StringUtils@isNotEmpty(name)">NAME = #{name,jdbcType=VARCHAR},</if>
+            <if test="sort!=null">SORT = #{sort,jdbcType=INTEGER},</if>
+            <if test="isValid!=null">IS_VALID = #{isValid,jdbcType=TINYINT},</if>
+            <if test="@com.kendo.util.StringUtils@isNotEmpty(info)">INFO = #{info,jdbcType=VARCHAR},</if>
+            <if test="@com.kendo.util.StringUtils@isNotEmpty(remark)">REMARK = #{remark,jdbcType=VARCHAR}</if>
+        </trim>
+        WHERE ID = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!-- RANK DELETE -->
+
+    <delete id="deleteByPrimaryKey" parameterType="long">
+        DELETE FROM sys_rank
+        WHERE ID = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <!-- RANK RESULTMAP -->
+
+    <resultMap id="rankResultMap" type="rank">
+        <id property="id" column="ID" jdbcType="INTEGER"/>
+        <result property="name" column="NAME" jdbcType="VARCHAR"/>
+        <result property="sort" column="SORT" jdbcType="INTEGER"/>
+        <result property="isValid" column="IS_VALID" jdbcType="TINYINT"/>
+        <result property="info" column="INFO" jdbcType="VARCHAR"/>
+        <result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="remark" column="REMARK" jdbcType="VARCHAR"/>
+        <association property="createUser" column="CREATE_ID" javaType="user" columnPrefix="CREATE_">
+            <id property="id" column="ID" jdbcType="INTEGER"/>
+            <result property="username" column="USERNAME" jdbcType="VARCHAR"/>
+            <result property="name" column="NAME" jdbcType="VARCHAR"/>
+        </association>
+    </resultMap>
+
+    <!-- RANK SELECT -->
+
+    <select id="selectAll" resultMap="rankResultMap">
+        SELECT
+            sys_rank.ID,
+            sys_rank.NAME,
+            sys_rank.SORT,
+            sys_rank.IS_VALID,
+            sys_rank.INFO,
+            sys_rank.REMARK,
+            sys_rank.CREATE_ID   AS CREATE_ID,
+            create_user.USERNAME AS CREATE_USERNAME,
+            create_user.NAME     AS CREATE_NAME
+        FROM sys_rank
+            LEFT JOIN sys_user create_user
+                ON sys_rank.CREATE_ID = create_user.ID
+    </select>
+
+    <select id="selectRanksIsValid" resultType="rank">
+        SELECT
+            ID,
+            NAME
+        FROM sys_rank
+        WHERE IS_VALID = 1;
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="long" resultMap="rankResultMap">
+        SELECT
+            sys_rank.ID,
+            sys_rank.NAME,
+            sys_rank.SORT,
+            sys_rank.IS_VALID,
+            sys_rank.INFO,
+            sys_rank.REMARK,
+            sys_rank.CREATE_ID   AS CREATE_ID,
+            create_user.USERNAME AS CREATE_USERNAME,
+            create_user.NAME     AS CREATE_NAME
+        FROM sys_rank
+            LEFT JOIN sys_user create_user
+                ON sys_rank.CREATE_ID = create_user.ID
+        WHERE sys_rank.ID = #{id,jdbcType=INTEGER}
+    </select>
+</mapper>

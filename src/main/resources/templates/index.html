@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Kendo</title>
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/vendor/fontawesome/css/font-awesome.css}">
+    <link rel="stylesheet" th:href="@{/vendor/kendo/styles/kendo.common.min.css}">
+    <link rel="stylesheet" th:href="@{/vendor/kendo/styles/kendo.default.min.css}">
+    <link rel="stylesheet" th:href="@{/css/kendo.common.css}">
+
+    <script th:src="@{/vendor/kendo/js/jquery.min.js}"></script>
+    <script th:src="@{/vendor/kendo/js/kendo.all.min.js}"></script>
+    <script th:src="@{/vendor/kendo/js/jszip.min.js}"></script>
+    <script th:src="@{/vendor/kendo/js/messages/kendo.messages.zh-CN.min.js}"></script>
+    <script th:src="@{/vendor/kendo/js/cultures/kendo.culture.zh-CN.min.js}"></script>
+</head>
+<body>
+<div>
+    <p>Welcome</p>
+    <p th:text="${message}">Message</p>
+    <p th:text="${#request.getContextPath()}"></p>
+    <img th:src="@{/images/f.jpg}"/>
+</div>
+<script>
+    $(function () {
+        console.log("jQuery is ready!");
+    });
+</script>
+</body>
+</html>

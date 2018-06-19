@@ -1,0 +1,34 @@
+body > .k-widget.k-window {
+    border: none;
+}
+
+#login-view .form-control {
+    padding: 8px 8px;
+    border: none;
+    width: auto;
+    color: inherit;
+    background-color: transparent;
+}
+
+#login-view .form-control:first-of-type {
+    margin-top: 10px;
+}
+
+#login-view .form-control .control-label {
+    padding: 0 4px;
+}
+
+#login-view .form-control .k-textbox {
+    width: 80%;
+    border-radius: 4px
+}
+
+#login-view .form-control button {
+    margin: 0 4px 0 0;
+}
+
+#login-view .form-control.pull-offset-right {
+    position: relative;
+    left: 20%;
+    width: 80px;
+}

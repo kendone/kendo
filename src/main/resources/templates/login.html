@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/css/kendo.login.css}">
+    <link rel="stylesheet" th:href="@{/vendor/fontawesome/css/font-awesome.css}">
+    <link rel="stylesheet" th:href="@{/vendor/kendo/styles/kendo.common.min.css}">
+    <link rel="stylesheet" th:href="@{/vendor/kendo/styles/kendo.default.min.css}">
+    <link rel="stylesheet" th:href="@{/css/kendo.common.css}">
+
+    <script th:src="@{/vendor/kendo/js/jquery.min.js}"></script>
+    <script th:src="@{/vendor/kendo/js/kendo.all.min.js}"></script>
+    <script th:src="@{/vendor/kendo/js/jszip.min.js}"></script>
+    <script th:src="@{/vendor/kendo/js/messages/kendo.messages.zh-CN.min.js}"></script>
+    <script th:src="@{/vendor/kendo/js/cultures/kendo.culture.zh-CN.min.js}"></script>
+</head>
+<body>
+<div id="login-view"
+     data-role="window"
+     data-title="登录"
+     data-width="420">
+    <form id="login-form" th:action="@{/login}" th:method="post">
+        <div class="form-control">
+            <label class="control-label" for="username">
+                <span class="fa fa-user"></span>&nbsp;账&nbsp;号:
+            </label>
+            <input name="username" class="k-textbox" data-bind="value:username" id="username" required
+                   validateMessage="用户名不能为空" autofocus autocomplete="off">
+        </div>
+        <div class="form-control">
+            <label class="control-label" for="password">
+                <span class="fa fa-lock"></span>&nbsp;密&nbsp;码:
+            </label>
+            <input name="password" class="k-textbox" data-bind="value:password" id="password" required
+                   validateMessage="密码不能为空" type="password" autocomplete="off">
+        </div>
+        <div class="form-control pull-offset-right">
+            <input id="rememberMe" name="rememberMe" class="k-checkbox" type="checkbox" value="true">
+            <label class="k-checkbox-label" for="rememberMe">记住密码</label>
+        </div>
+        <div class="form-control pull-right">
+            <button class="k-button k-primary" type="button" data-bind="click:onLogin">
+                <span class="fa fa-sign-in"></span>&nbsp;登录
+            </button>
+            <button class="k-button" type="button" data-bind="click:onReset">
+                <span class="k-icon k-i-cancel"></span>&nbsp;取 消
+            </button>
+        </div>
+    </form>
+</div>
+<script th:src="@{/js/kendo.login.js}"></script>
+</body>
+</html>

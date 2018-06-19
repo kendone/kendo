@@ -1,0 +1,178 @@
+@charset "utf-8";
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-size: 14px;
+    font-family: Consolas, "华文楷体", monospace;
+    /*font-family: 14px/16px Arial, Helvetica, sans-serif;*/
+    font-weight: bold;
+}
+
+/* FONTAWESOME ICON */
+.fa.k-sprite,
+.fa.k-sprite::before {
+    font-size: 1em;
+    line-height: 1em;
+    vertical-align: middle;
+}
+
+/* PANELBAR */
+.k-panelbar .k-tabstrip > .k-content, .k-tabstrip > .k-content {
+    padding: .1em .1em;
+}
+
+/* WIDGET */
+.k-widget:not(.k-upload) {
+    border: none;
+}
+
+/* TABSTRIP */
+.k-tabstrip-top .k-tabstrip-items .k-state-active {
+    border-bottom-width: 0
+}
+
+/* GRID */
+.k-grid-header tr,
+.k-grid-content tr {
+    /*font-size: .857em;*/
+}
+
+.k-grid th.k-header {
+    text-align: center;
+}
+
+.k-grid tbody button.k-button {
+    min-width: 60px;
+}
+
+.k-grid td {
+    border-width: 0 0 1px 1px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.k-grid td:last-of-type {
+    border-width: 0 1px 1px 1px;
+}
+
+.k-grid tbody td input[type='password'] {
+    width: 80px !important;
+    border: none !important;
+    background: transparent;
+}
+
+.k-grid tbody td input[type='password']:hover,
+.k-grid tbody td input[type='password']:focus,
+.k-grid tbody td input[type='password']:active {
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    background: transparent;
+}
+
+.k-grid-footer-wrap,
+.k-grid-header-wrap {
+    border-width: 0;
+}
+
+.k-grid-header th:last-of-type {
+    border-width: 0 1px 1px 1px;
+}
+
+.k-textarea-locked {
+    resize: none;
+    overflow-y: auto;
+}
+
+/* MENU */
+.k-menu.k-menu-vertical > .k-item.k-item-bordered {
+    border-bottom-width: 1px;
+    border-style: solid;
+}
+
+/* LAYOUT */
+#outer-splitter {
+    height: 100%;
+}
+
+#outer-splitter > header {
+    overflow: visible;
+    z-index: 999;
+}
+
+#inner-splitter {
+    height: 100%;
+    overflow: hidden;
+}
+
+#center-region > .k-tabstrip-wrapper,
+#main-tabstrip {
+    overflow: hidden;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+#main-tabstrip > .k-content {
+    position: absolute;
+    overflow: hidden;
+    top: 38px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-left: 0;
+}
+
+#aside-menu {
+    height: 100%;
+}
+
+#aside-menu li {
+    font-size: 1.2em;
+    border-bottom-width: 1px;
+}
+
+#aside-menu li i.fa {
+    margin-right: 10px;
+    font-size: 1.6em;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#main-tabstrip .k-tabstrip-items li .k-link[data-action='close'] {
+    padding: 0;
+    vertical-align: middle;
+    margin-left: 6px;
+}
+
+#main-tabstrip .k-tabstrip-items li .k-link[data-action='close'] .k-icon {
+    margin: 0;
+}
+
+#main-tabstrip .k-tabstrip-items li .k-link[data-action='close'] .k-icon:hover {
+    border-radius: 50%;
+}
+
+#menu-splitter {
+    height: 100%;
+}
+
+#menu-splitter .k-treeview .k-item {
+    margin: .8em;
+}
+
+#user-select-listbox-wrapper .k-splitbar {
+    display: none;
+}
+
+#user-select-listbox-wrapper .k-listbox-toolbar {
+    margin-right: 5px;
+    top: 32%;
+    position: relative;
+}
