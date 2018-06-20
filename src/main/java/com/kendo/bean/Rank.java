@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @author nason
+ * @author kendone
  */
 public class Rank implements Serializable{
     private static final long serialVersionUID = 7642333500598199052L;

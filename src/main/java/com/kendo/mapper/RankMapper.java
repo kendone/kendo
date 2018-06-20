@@ -12,7 +12,7 @@ import java.util.List;
 @Mapper
 public interface RankMapper extends BaseMapper<Rank> {
 
-    List<Rank> selectRanksIsValid();
+    List<Rank> selectValidRanks();
 
     List<Rank> selectAll();
 }
