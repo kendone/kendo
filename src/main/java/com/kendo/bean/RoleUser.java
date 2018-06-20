@@ -3,7 +3,7 @@ package com.kendo.bean;
 import java.io.Serializable;
 
 /**
- * @author nason
+ * @author kendone
  */
 public class RoleUser implements Serializable {
 

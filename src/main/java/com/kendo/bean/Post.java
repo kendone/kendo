@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @author nason
+ * @author kendone
  */
 public class Post implements Serializable{
     private static final long serialVersionUID = 8427138354964084251L;

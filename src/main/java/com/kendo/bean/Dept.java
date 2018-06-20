@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @author nason
+ * @author kendone
  */
 public class Dept implements Serializable {
 
