@@ -1,6 +1,6 @@
 /**
  * Common conversion config and utilities
- * @author kendone
+ * @author  kendone
  */
 var common = (function ($) {
     var obj = {

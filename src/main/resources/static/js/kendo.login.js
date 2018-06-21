@@ -37,7 +37,7 @@ $(function () {
     });
     login.center().open();
     login.bind('close', function (e) {
-        kendo.confirm("退出系统吗?").done(function () {
+        kendo.confirm("退出系统吗 ?").done(function () {
             kendo.alert(e.userTriggered);
         }).fail(function () {
             kendo.alert("不关闭");

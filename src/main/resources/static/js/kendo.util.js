@@ -1,5 +1,5 @@
 /**
- * @author kendone
+ * @author  kendone
  */
 var util = (function () {
 

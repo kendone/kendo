@@ -1,5 +1,5 @@
 var core = (function () {
-    var $mainTabstrip,//主内容展现区jQuery对象
+    var $mainTabstrip,//主内容展现区 jQuery 对象
         mainTabstrip,//主内容展现区KendoUI对象
         $asideMenu,//顶级导航菜单jQuery对象
         asideMenu,//顶级导航菜单KendoUI对象
