@@ -12,4 +12,5 @@ public class IndexController {
         model.addAttribute("message","Spring Boot!!");
         return "index";
     }
+
 }

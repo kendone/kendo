@@ -9,4 +9,5 @@ public class KendoApplication {
     public static void main(String[] args) {
         SpringApplication.run(KendoApplication.class, args);
     }
+
 }

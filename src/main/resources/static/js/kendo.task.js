@@ -1,4 +1,3 @@
-
 $(document).ready(function () {
     var taskId,
         taskDefKey,
