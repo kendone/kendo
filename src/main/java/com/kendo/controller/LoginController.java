@@ -19,8 +19,8 @@ public class LoginController {
     }
 
     @PostMapping("login")
-    public String logined(Model model) {
-        return "login";
+    public String login(Model model) {
+        return "home";
     }
 
     @GetMapping("logout")
