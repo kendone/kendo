@@ -37,7 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) {
         web.ignoring().antMatchers("/css/**", "/images/**",
-                "/vendor/**", "/webjars/","/js/**"
+                "/vendor/**", "/webjars/", "/js/**"
         );
     }
 
@@ -50,15 +50,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/home")
+                .defaultSuccessUrl("/index")
                 .failureUrl("/login?error")
                 .permitAll()
                 .and()
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login?logout")
+                .logoutSuccessUrl("/login")
+                //.deleteCookies("rememberMe")
                 .permitAll()
                 .and()
+                //.rememberMe()
+                //.and()
                 .exceptionHandling()
                 .accessDeniedPage("/denied");
     }
