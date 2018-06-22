@@ -3,7 +3,6 @@ package com.kendo.bean;
 import java.io.Serializable;
 
 /**
- * 用户身份
  * @author nason
  */
 public class Principal implements Serializable {
