@@ -21,7 +21,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserDetailsService customUserDetailsService;
+    private UserDetailsService kendoUserDetailsService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -30,7 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(customUserDetailsService)
+        auth.userDetailsService(kendoUserDetailsService)
                 .passwordEncoder(passwordEncoder());
     }
 
@@ -50,7 +50,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                .loginProcessingUrl("/login")
                 .defaultSuccessUrl("/home")
                 .failureUrl("/login?error")
                 .permitAll()
@@ -61,6 +60,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .exceptionHandling()
-                .accessDeniedPage("/accessDenied");
+                .accessDeniedPage("/denied");
     }
 }

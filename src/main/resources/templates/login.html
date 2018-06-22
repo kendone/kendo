@@ -50,6 +50,9 @@
                 <span class="k-icon k-i-cancel"></span>&nbsp;取 消
             </button>
         </div>
+        <div th:if="${param.error}">
+            <span>Invalid Username and Password!</span>
+        </div>
     </form>
 </div>
 <script th:src="@{/js/kendo.login.js}"></script>

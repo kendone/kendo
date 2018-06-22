@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kendo.mapper.PrincipalMapper">
+
+    <!-- PRINCIPAL RESULTMAP -->
+    <resultMap id="principalResultMap" type="principal">
+        <id property="id" column="ID" jdbcType="INTEGER"/>
+        <result property="name" column="NAME" jdbcType="VARCHAR"/>
+        <result property="username" column="USERNAME" jdbcType="VARCHAR"/>
+        <result property="identicalName" column="IDENTICAL_NAME" jdbcType="VARCHAR"/>
+        <result property="password" column="PASSWORD" jdbcType="VARCHAR"/>
+        <result property="salt" column="SALT" jdbcType="VARCHAR"/>
+        <result property="deptId" column="DEPT_ID" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- PRINCIPAL SELECT -->
+    <select id="selectByUsername" parameterType="string" resultMap="principalResultMap">
+        SELECT
+            ID,
+            NAME,
+            USERNAME,
+            concat(NAME, '(', USERNAME, ')') AS IDENTICAL_NAME,
+            PASSWORD,
+            SALT,
+            DEPT_ID
+        FROM sys_user
+        WHERE USERNAME = #{username,jdbcType=VARCHAR} AND IS_VALID = 1 AND IS_STATUS = 1
+    </select>
+</mapper>

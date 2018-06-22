@@ -1,6 +1,6 @@
 $(function () {
     var loginModel = kendo.observable({
-            username: "2947",
+            username: "admin",
             password: "",
             rememberMe: true,
 

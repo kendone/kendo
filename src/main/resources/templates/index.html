@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta charset="UTF-8">
     <title>Kendo</title>
@@ -17,8 +18,11 @@
 </head>
 <body>
 <div>
-    <p>Welcome</p>
-    <p th:text="${message}">Message</p>
+    <p>Welcome <span sec:authentication="principal.username"> User</span></p>
+    <p><a th:href="@{/logout}">Logout</a></p>
+    <div sec:authorize="hasAnyAuthority('ROLE_ADMIN','ROLE_USER')">
+        <h3>You has 'Admin' authority!</h3>
+    </div>
     <p th:text="${#request.getContextPath()}"></p>
     <img th:src="@{/images/f.jpg}"/>
 </div>
