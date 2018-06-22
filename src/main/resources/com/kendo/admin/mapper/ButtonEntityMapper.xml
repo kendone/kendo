@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kendo.admin.mapper.ButtonEntityMapper">
+
+    <!-- BUTTON INSERT -->
+    <insert id="insertIgnoreNull" parameterType="buttonEntity" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sys_button
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(name)">NAME,</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(text)">TEXT,</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(icon)">ICON,</if>
+            <if test="windowId!=null">WINDOW_ID,</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(event)">EVENT,</if>
+            <if test="sort!=null">SORT,</if>
+            <if test="isValid!=null">IS_VALID,</if>
+            <if test="isShow!=null">IS_SHOW,</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(remark)">REMARK</if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(name)">#{name,jdbcType=VARCHAR},</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(text)">#{text,jdbcType=VARCHAR},</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(icon)">#{icon,jdbcType=VARCHAR},</if>
+            <if test="windowId!=null">#{windowId,jdbcType=INTEGER},</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(event)">#{event,jdbcType=VARCHAR},</if>
+            <if test="sort!=null">#{sort,jdbcType=INTEGER},</if>
+            <if test="isValid!=null">#{isValid,jdbcType=INTEGER},</if>
+            <if test="isShow!=null">#{isShow,jdbcType=INTEGER},</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(remark)">#{remark,jdbcType=VARCHAR}</if>
+        </trim>
+    </insert>
+
+    <!-- BUTTON UPDATE -->
+    <update id="update" parameterType="buttonEntity">
+        UPDATE sys_button
+        <trim prefix="SET ">
+            NAME = #{name,jdbcType=VARCHAR},
+            TEXT = #{text,jdbcType=VARCHAR},
+            ICON = #{icon,jdbcType=VARCHAR},
+            WINDOW_ID = #{windowId,jdbcType=INTEGER},
+            EVENT = #{event,jdbcType=VARCHAR},
+            SORT = #{sort,jdbcType=INTEGER},
+            IS_VALID = #{isValid,jdbcType=INTEGER},
+            IS_SHOW = #{isShow,jdbcType=INTEGER},
+            REMARK = #{remark,jdbcType=VARCHAR}
+        </trim>
+        WHERE ID = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!-- BUTTON DELETE -->
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        DELETE FROM sys_button
+        WHERE ID = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <!-- BUTTON RESULTMAP -->
+    <resultMap id="buttonResultMap" type="buttonEntity">
+        <id property="id" column="ID" jdbcType="INTEGER"/>
+        <result property="icon" column="ICON" jdbcType="VARCHAR"/>
+        <result property="name" column="NAME" jdbcType="VARCHAR"/>
+        <result property="text" column="TEXT" jdbcType="VARCHAR"/>
+        <result property="windowId" column="WINDOW_ID" jdbcType="INTEGER"/>
+        <result property="event" column="EVENT" jdbcType="VARCHAR"/>
+        <result property="sort" column="SORT" jdbcType="INTEGER"/>
+        <result property="isValid" column="IS_VALID" jdbcType="INTEGER"/>
+        <result property="isShow" column="IS_SHOW" jdbcType="INTEGER"/>
+        <result property="remark" column="REMARK" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- BUTTON SELECT -->
+    <select id="selectByWindowId" parameterType="long" resultMap="buttonResultMap">
+        SELECT
+            ID,
+            ICON,
+            NAME,
+            TEXT,
+            WINDOW_ID,
+            EVENT,
+            SORT,
+            IS_VALID,
+            IS_SHOW,
+            REMARK
+        FROM sys_button
+        WHERE WINDOW_ID = #{windowId,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="long" resultMap="buttonResultMap">
+        SELECT
+            ID,
+            ICON,
+            NAME,
+            TEXT,
+            WINDOW_ID,
+            EVENT,
+            SORT,
+            IS_VALID,
+            IS_SHOW,
+            REMARK
+        FROM sys_button
+        WHERE ID = #{id,jdbcType=INTEGER}
+    </select>
+</mapper>

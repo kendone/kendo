@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kendo.admin.mapper.WindowEntityMapper">
+
+    <!-- WINDOW INSERT -->
+    <insert id="insertIgnoreNull" parameterType="windowEntity" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sys_window
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(name)">NAME,</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(icon)">ICON,</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(model)">MODEL,</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(url)">URL,</if>
+            <if test="parentWindow!=null">PARENT_ID,</if>
+            <if test="isValid!=null">IS_VALID,</if>
+            <if test="isShow!=null">IS_SHOW,</if>
+            <if test="isLeaf!=null">IS_LEAF,</if>
+            <if test="@com.kendo.util.StringUtil@isWhitespaceOrTrue(expanded)">EXPANDED,</if>
+            <if test="createUser!=null">CREATE_ID,</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(remark)">REMARK</if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(name)">#{name,jdbcType=VARCHAR},</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(icon)">#{icon,jdbcType=VARCHAR},</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(model)">#{model,jdbcType=VARCHAR},</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(url)">#{url,jdbcType=VARCHAR},</if>
+            <if test="parentWindow!=null">#{parentWindow.id,jdbcType=INTEGER},</if>
+            <if test="isValid!=null">#{isValid,jdbcType=INTEGER},</if>
+            <if test="isShow!=null">#{isShow,jdbcType=INTEGER},</if>
+            <if test="isLeaf!=null">#{isLeaf,jdbcType=INTEGER},</if>
+            <if test="@com.kendo.util.StringUtil@isWhitespaceOrTrue(expanded)">EXPANDED = #{expanded,jdbcType=VARCHAR},
+            </if>
+            <if test="createUser!=null">#{createUser.id,jdbcType=INTEGER},</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(remark)">REMARK = #{remark,jdbcType=VARCHAR}</if>
+        </trim>
+    </insert>
+
+    <!-- WINDOW UPDATE -->
+    <update id="update" parameterType="windowEntity">
+        UPDATE sys_window
+        <trim prefix="SET ">
+            NAME = #{name,jdbcType=VARCHAR},
+            ICON = #{icon,jdbcType=VARCHAR},
+            MODEL = #{model,jdbcType=VARCHAR},
+            URL = #{url,jdbcType=VARCHAR},
+            PARENT_ID = #{parentWindow.id,jdbcType=INTEGER},
+            IS_VALID = #{isValid,jdbcType=INTEGER},
+            IS_SHOW = #{isShow,jdbcType=INTEGER},
+            IS_LEAF = #{isLeaf,jdbcType=INTEGER},
+            EXPANDED = #{expanded,jdbcType=VARCHAR},
+            REMARK = #{remark,jdbcType=VARCHAR}
+        </trim>
+        WHERE ID = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!-- WINDOW DELETE -->
+    <delete id="deleteByPrimaryKey" parameterType="long">
+        DELETE FROM sys_window
+        WHERE ID = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <!-- WINDOW RESULTMAP -->
+    <resultMap id="windowEntityResultMap" type="windowEntity">
+        <id property="id" column="ID" jdbcType="INTEGER"/>
+        <result property="name" column="NAME" jdbcType="VARCHAR"/>
+        <result property="icon" column="ICON" jdbcType="VARCHAR"/>
+        <result property="model" column="MODEL" jdbcType="VARCHAR"/>
+        <result property="url" column="URL" jdbcType="VARCHAR"/>
+        <result property="isValid" column="IS_VALID" jdbcType="INTEGER"/>
+        <result property="isShow" column="IS_SHOW" jdbcType="INTEGER"/>
+        <result property="expanded" column="EXPANDED" jdbcType="VARCHAR"/>
+        <result property="isLeaf" column="IS_LEAF" jdbcType="TINYINT"/>
+        <result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="remark" column="REMARK" jdbcType="VARCHAR"/>
+        <association property="parentWindow" column="PARENT_ID" javaType="window" columnPrefix="PARENT_">
+            <id property="id" column="ID" jdbcType="INTEGER"/>
+            <result property="name" column="NAME" jdbcType="VARCHAR"/>
+        </association>
+        <association property="createUser" column="CREATE_ID" javaType="user" columnPrefix="CREATE_">
+            <id property="id" column="ID" jdbcType="INTEGER"/>
+            <result property="identicalName" column="IDENTICAL_NAME" jdbcType="VARCHAR"/>
+        </association>
+    </resultMap>
+
+    <select id="selectValidWindowByWindowId" parameterType="java.lang.Long" resultType="windowEntity">
+        SELECT
+        ID,
+        NAME,
+        EXPANDED,
+        ICON,
+        IS_LEAF
+        FROM sys_window
+        WHERE IS_SHOW = 1
+        AND IS_VALID = 1
+        <if test="windowId==null">
+            AND PARENT_ID IS NULL
+        </if>
+        <if test="windowId!=null">
+            AND PARENT_ID = #{windowId,jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <select id="find" parameterType="windowEntity" resultMap="windowEntityResultMap">
+        SELECT
+        sys_window.ID,
+        sys_window.NAME,
+        sys_window.ICON,
+        sys_window.MODEL,
+        sys_window.URL,
+        parent_window.ID AS PARENT_ID,
+        parent_window.NAME AS PARENT_NAME,
+        sys_window.IS_VALID,
+        sys_window.IS_SHOW,
+        sys_window.IS_LEAF,
+        sys_window.EXPANDED,
+        sys_window.CREATE_ID AS CREATE_ID,
+        create_user.IDENTICAL_NAME AS CREATE_IDENTICAL_NAME,
+        sys_window.CREATE_TIME,
+        sys_window.REMARK
+        FROM sys_window
+        LEFT JOIN sys_window parent_window
+        ON sys_window.PARENT_ID = parent_window.ID
+        LEFT JOIN v_sys_user create_user
+        ON sys_window.CREATE_ID = create_user.ID
+        <choose>
+            <when test="window!=null">
+                <trim prefix="WHERE " prefixOverrides="AND">
+                    <if test="window.isValid!=null">AND sys_window.IS_VALID = #{window.isValid,jdbcType=INTEGER}</if>
+                    <if test="window.isShow!=null">AND sys_window.IS_SHOW = #{window.isShow,jdbcType=INTEGER}</if>
+                </trim>
+            </when>
+            <otherwise/>
+        </choose>
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="long" resultMap="windowEntityResultMap">
+        SELECT
+            sys_window.ID,
+            sys_window.NAME,
+            sys_window.ICON,
+            sys_window.MODEL,
+            sys_window.URL,
+            parent_window.ID     AS PARENT_ID,
+            parent_window.NAME   AS PARENT_NAME,
+            sys_window.IS_VALID,
+            sys_window.IS_SHOW,
+            sys_window.IS_LEAF,
+            sys_window.EXPANDED,
+            sys_window.CREATE_ID AS CREATE_ID,
+            create_user.USERNAME AS CREATE_USERNAME,
+            create_user.NAME     AS CREATE_NAME,
+            sys_window.CREATE_TIME,
+            sys_window.REMARK
+        FROM sys_window
+            LEFT JOIN sys_window parent_window
+                ON sys_window.PARENT_ID = parent_window.ID
+            LEFT JOIN sys_user create_user
+                ON sys_window.CREATE_ID = create_user.ID
+        WHERE sys_window.ID = #{id,jdbcType=INTEGER}
+    </select>
+</mapper>
