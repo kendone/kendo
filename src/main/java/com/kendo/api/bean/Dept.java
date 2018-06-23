@@ -8,8 +8,8 @@ import java.io.Serializable;
 public class Dept implements Serializable {
 
     private static final long serialVersionUID = -3958213879129833029L;
-    private Long id;//部门id
-    private String name;//部门名称
+    private Long id;
+    private String name;
 
     public Long getId() {
         return id;

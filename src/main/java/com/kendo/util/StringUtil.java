@@ -1,5 +1,8 @@
 package com.kendo.util;
 
+/**
+ * @author kendone
+ */
 public class StringUtil {
 
     public static boolean isWhitespaceOrTrue(String str) {
@@ -13,5 +16,8 @@ public class StringUtil {
     public static boolean isEmpty(String str) {
         return str == null || str.length() == 0
                 || str.matches("\\s*");
+    }
+
+    private StringUtil() {
     }
 }

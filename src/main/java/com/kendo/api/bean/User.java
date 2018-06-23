@@ -8,10 +8,10 @@ import java.io.Serializable;
 public class User implements Serializable {
 
     private static final long serialVersionUID = -3115833177509155278L;
-    private Long id;//用户ID
-    private String name;//用户姓名
-    private String username;//用户工号
-    private String identicalName;//姓名(工号) 如王二小(1000)
+    private Long id;
+    private String name;
+    private String username;
+    private String identicalName;//name(username)
 
     public Long getId() {
         return id;
