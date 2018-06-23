@@ -5,11 +5,11 @@ import java.io.Serializable;
 /**
  * @author kendone
  */
-public class Window implements Serializable {
+public class Dept implements Serializable {
 
-    private static final long serialVersionUID = -8066676593205791946L;
-    private Long id;
-    private String name;
+    private static final long serialVersionUID = -3958213879129833029L;
+    private Long id;//部门id
+    private String name;//部门名称
 
     public Long getId() {
         return id;

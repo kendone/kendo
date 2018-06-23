@@ -1,7 +1,7 @@
-package com.kendo.service;
+package com.kendo.security.service;
 
-import com.kendo.bean.Principal;
-import com.kendo.mapper.PrincipalMapper;
+import com.kendo.security.bean.Principal;
+import com.kendo.security.mapper.PrincipalMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;

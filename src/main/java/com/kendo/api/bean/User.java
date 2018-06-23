@@ -3,7 +3,7 @@ package com.kendo.api.bean;
 import java.io.Serializable;
 
 /**
- * 用户数据传输实体类
+ * @author kendone
  */
 public class User implements Serializable {
 

@@ -5,9 +5,9 @@ import java.io.Serializable;
 /**
  * @author kendone
  */
-public class Window implements Serializable {
+public class Post implements Serializable {
 
-    private static final long serialVersionUID = -8066676593205791946L;
+    private static final long serialVersionUID = -6596640114910743414L;
     private Long id;
     private String name;
 

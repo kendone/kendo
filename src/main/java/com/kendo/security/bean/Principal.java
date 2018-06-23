@@ -1,21 +1,21 @@
-package com.kendo.bean;
+package com.kendo.security.bean;
 
 import java.io.Serializable;
 
 /**
- * @author nason
+ * @author kendone
  */
 public class Principal implements Serializable {
 
     private static final long serialVersionUID = -3309242917851705670L;
 
-    private Long id;//用户ID
-    private String name;//姓名
-    private String username;//账户即工号
-    private String identicalName;//姓名(工号)形式的易识别名称
-    private String password;//密码
-    private String salt;//盐
-    private Long deptId;//用户所在部门ID
+    private Long id;
+    private String name;
+    private String username;
+    private String identicalName;
+    private String password;
+    private String salt;
+    private Long deptId;
 
     public Principal() {
     }

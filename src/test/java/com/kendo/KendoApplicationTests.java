@@ -1,7 +1,7 @@
 package com.kendo;
 
-import com.kendo.bean.Principal;
-import com.kendo.mapper.PrincipalMapper;
+import com.kendo.security.bean.Principal;
+import com.kendo.security.mapper.PrincipalMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
