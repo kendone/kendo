@@ -45,9 +45,8 @@
         <!-- LEFT REGION -->
         <nav id="left-region">
             <!--<ul id="aside-menu">-->
-            <ul id="aside-menu" th:each="menu : ${menus}">
-                <!-- 根据当前用户的角色菜单权限加载顶级菜单资源 -->
-                <li th:title="${menu.name}" data-th-id="${menu.id}">
+            <ul id="aside-menu">
+                <li th:each="menu : ${menus}" th:title="${menu.name}" th:data-id="${menu.id}">
                     <i th:class="${menu.icon}"></i>
                 </li>
             </ul>

@@ -12,11 +12,8 @@ import java.util.List;
 @Mapper
 public interface MenuMapper extends BaseMapper<Menu> {
 
-    //USER CORRELATION
-    //根据用户查询叶子菜单的权限字符串
-    List<String> selectLeafMenuPermissionsByUserId(Long userId);
     //根据用户查询顶级菜单
-    List<Menu> selectAsideMenusByUserId(Long userId);
+    List<Menu> selectMenuByUsername(String username);
 
     //根据角色查询用户的菜单,目前没有和角色进行关联后期补充
     List<Menu> selectValidMenu();

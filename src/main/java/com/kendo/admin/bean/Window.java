@@ -2,6 +2,9 @@ package com.kendo.admin.bean;
 
 import java.io.Serializable;
 
+/**
+ * @author kendone
+ */
 public class Window implements Serializable {
 
     private static final long serialVersionUID = -8066676593205791946L;

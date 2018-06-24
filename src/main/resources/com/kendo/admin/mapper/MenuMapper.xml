@@ -4,12 +4,11 @@
 
     <!-- MENU INSERT -->
     <insert id="insertIgnoreNull" parameterType="menu" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO menus
+        INSERT INTO menu
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="@com.kendo.util.StringUtil@isNotEmpty(name)">NAME,</if>
             <if test="@com.kendo.util.StringUtil@isNotEmpty(label)">LABEL,</if>
             <if test="parentId!=null">PARENT_ID,</if>
-            <if test="scale!=null">SCALE,</if>
             <if test="sort!=null">SORT,</if>
             <if test="@com.kendo.util.StringUtil@isNotEmpty(icon)">ICON,</if>
             <if test="@com.kendo.util.StringUtil@isNotEmpty(permission)">PERMISSION,</if>
@@ -25,7 +24,6 @@
             <if test="@com.kendo.util.StringUtil@isNotEmpty(name)">#{name,jdbcType=VARCHAR},</if>
             <if test="@com.kendo.util.StringUtil@isNotEmpty(label)">#{label,jdbcType=VARCHAR},</if>
             <if test="parentId!=null">#{parentId,jdbcType=INTEGER},</if>
-            <if test="scale!=null">#{scale,jdbcType=INTEGER},</if>
             <if test="sort!=null">#{sort,jdbcType=INTEGER},</if>
             <if test="@com.kendo.util.StringUtil@isNotEmpty(icon)">#{icon,jdbcType=VARCHAR},</if>
             <if test="@com.kendo.util.StringUtil@isNotEmpty(permission)">#{permission,jdbcType=VARCHAR},</if>
@@ -41,12 +39,11 @@
 
     <!-- MENU UPDATE -->
     <update id="update" parameterType="menu">
-        UPDATE menus
+        UPDATE menu
         <trim prefix="SET ">
             NAME = #{name,jdbcType=VARCHAR},
             LABEL = #{label,jdbcType=VARCHAR},
             PARENT_ID = #{parentId,jdbcType=INTEGER},
-            SCALE = #{scale,jdbcType=INTEGER},
             SORT = #{sort,jdbcType=INTEGER},
             ICON = #{icon,jdbcType=VARCHAR},
             PERMISSION = #{permission,jdbcType=VARCHAR},
@@ -62,7 +59,7 @@
 
     <!-- MENU DELETE -->
     <delete id="deleteByPrimaryKey" parameterType="long">
-        DELETE FROM menus
+        DELETE FROM menu
         WHERE ID = #{id,jdbcType=INTEGER}
     </delete>
 
@@ -72,7 +69,6 @@
         <result property="name" column="NAME" jdbcType="VARCHAR"/>
         <result property="label" column="LABEL" jdbcType="VARCHAR"/>
         <result property="parentId" column="PARENT_ID" jdbcType="INTEGER"/>
-        <result property="scale" column="SCALE" jdbcType="INTEGER"/>
         <result property="sort" column="SORT" jdbcType="INTEGER"/>
         <result property="icon" column="ICON" jdbcType="VARCHAR"/>
         <result property="permission" column="PERMISSION" jdbcType="VARCHAR"/>
@@ -82,8 +78,8 @@
         <result property="isShow" column="IS_SHOW" jdbcType="TINYINT"/>
         <result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
         <result property="remark" column="REMARK" jdbcType="VARCHAR"/>
-        <association property="createUser" column="CREATE_ID" javaType="user" columnPrefix="CREATE_">
-            <id property="id" column="ID" jdbcType="INTEGER"/>
+        <association property="createUser" column="CREATE_USER" javaType="user" columnPrefix="CREATE_">
+            <id property="username" column="USERNAME" jdbcType="VARCHAR"/>
             <result property="identicalName" column="IDENTICAL_NAME" jdbcType="VARCHAR"/>
         </association>
         <association property="window" column="WINDOW_ID" javaType="window" columnPrefix="WINDOW_">
@@ -93,51 +89,31 @@
     </resultMap>
 
     <!-- MENU SELECT -->
-    <select id="selectLeafMenuPermissionsByUserId" parameterType="java.lang.Long" resultType="java.lang.String">
-        SELECT DISTINCT menus.PERMISSION
-        FROM menus
-            JOIN sys_role_menu rm
-                ON menus.ID = rm.MENU_ID
-                   AND menus.IS_VALID = 1
-                   AND menus.IS_SHOW = 1
-                   AND menus.IS_LEAF = 1
-                   AND menus.PERMISSION IS NOT NULL
-                   AND rm.ROLE_ID IN
-                       (
-                           SELECT DISTINCT r.ID
-                           FROM sys_role_user ru, sys_role r
-                           WHERE ru.ROLE_ID = r.ID
-                                 AND r.IS_VALID = 1
-                                 AND ru.USER_ID = #{userId,jdbcType=INTEGER}
-                       )
-    </select>
-
-    <select id="selectAsideMenusByUserId" parameterType="long" resultType="menu">
+    <select id="selectMenuByUsername" parameterType="string" resultType="menu">
         SELECT DISTINCT
             menu.ID,
             menu.NAME,
             menu.ICON
-        FROM menus menu, sys_role_user ru, sys_role_menu rm, sys_role role
+        FROM menu menu, role_user ru,
+            role_menu rm, role role
         WHERE menu.IS_VALID = 1
               AND menu.PARENT_ID = 1
               AND menu.ID = rm.MENU_ID
-              AND ru.ROLE_ID = rm.ROLE_ID
+              AND ru.ROLE_NAME = rm.ROLE_NAME
               AND role.IS_VALID = 1
-              AND ru.USER_ID = #{userId,jdbcType=INTEGER}
+              AND ru.USERNAME = #{username,jdbcType=VARCHAR}
     </select>
 
-    <select id="selectValidMenu" parameterType="long" resultType="menu">
+    <select id="selectValidMenus" parameterType="long" resultType="menu">
         SELECT
             ID,
             NAME,
             ICON,
             PARENT_ID,
-            SCALE,
             IS_LEAF
-        FROM menus
+        FROM menu
         WHERE IS_VALID = 1
               AND PARENT_ID IS NOT NULL
-              AND SCALE IS NOT NULL
               --         <![CDATA[AND scale <> 0]]>
               AND IS_SHOW = 1
         ORDER BY PARENT_ID, SORT ASC
@@ -145,58 +121,56 @@
 
     <select id="selectAll" resultMap="menuResultMap">
         SELECT
-            menus.ID,
-            menus.NAME,
-            menus.LABEL,
-            menus.PARENT_ID,
-            menus.SCALE,
-            menus.SORT,
-            menus.PERMISSION,
-            menus.ICON,
-            menus.EXPANDED,
-            menus.IS_LEAF,
-            menus.WINDOW_ID,
+            menu.ID,
+            menu.NAME,
+            menu.LABEL,
+            menu.PARENT_ID,
+            menu.SORT,
+            menu.PERMISSION,
+            menu.ICON,
+            menu.EXPANDED,
+            menu.IS_LEAF,
+            menu.WINDOW_ID,
             open_window.NAME           AS WINDOW_NAME,
-            menus.IS_VALID,
-            menus.IS_SHOW,
-            menus.CREATE_ID         AS CREATE_ID,
+            menu.IS_VALID,
+            menu.IS_SHOW,
+            menu.CREATE_USER           AS CREATE_USERNAME,
             create_user.IDENTICAL_NAME AS CREATE_IDENTICAL_NAME,
-            menus.CREATE_TIME,
-            menus.REMARK
-        FROM menus
-            LEFT JOIN sys_window open_window
-                ON menus.WINDOW_ID = open_window.ID
+            menu.CREATE_TIME,
+            menu.REMARK
+        FROM menu
+            LEFT JOIN window open_window
+                ON menu.WINDOW_ID = open_window.ID
             LEFT JOIN v_sys_user create_user
-                ON menus.CREATE_ID = create_user.ID
+                ON menu.CREATE_USER = create_user.USERNAME
     </select>
 
     <select id="selectByPrimaryKey" parameterType="long" resultMap="menuResultMap">
         SELECT
-            menus.ID,
-            menus.NAME,
-            menus.LABEL,
-            menus.PARENT_ID,
-            menus.SCALE,
-            menus.SORT,
-            menus.PERMISSION,
-            menus.ICON,
-            menus.EXPANDED,
-            menus.IS_LEAF,
-            menus.WINDOW_ID   AS WINDOW_ID,
+            menu.ID,
+            menu.NAME,
+            menu.LABEL,
+            menu.PARENT_ID,
+            menu.SORT,
+            menu.PERMISSION,
+            menu.ICON,
+            menu.EXPANDED,
+            menu.IS_LEAF,
+            menu.WINDOW_ID       AS WINDOW_ID,
             open_window.NAME     AS WINDOW_NAME,
-            menus.IS_VALID,
-            menus.IS_SHOW,
-            menus.CREATE_ID   AS CREATE_ID,
+            menu.IS_VALID,
+            menu.IS_SHOW,
+            menu.CREATE_USER     AS CREATE_ID,
             create_user.USERNAME AS CREATE_USERNAME,
             create_user.NAME     AS CREATE_NAME,
-            menus.CREATE_TIME,
-            menus.REMARK
-        FROM menus
-            LEFT JOIN sys_window open_window
-                ON menus.WINDOW_ID = open_window.ID
-            LEFT JOIN sys_user create_user
-                ON menus.CREATE_ID = create_user.ID
-        WHERE menus.ID = #{id,jdbcType=INTEGER}
+            menu.CREATE_TIME,
+            menu.REMARK
+        FROM menu
+            LEFT JOIN window open_window
+                ON menu.WINDOW_ID = open_window.ID
+            LEFT JOIN user create_user
+                ON menu.CREATE_USER = create_user.USERNAME
+        WHERE menu.ID = #{id,jdbcType=INTEGER}
     </select>
 
 </mapper>

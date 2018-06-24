@@ -14,7 +14,7 @@ public class Principal implements Serializable {
     private String name;
     private String username;
     private String password;
-    private List<Role> roles;
+    private List<PrincipalRole> roles;
 
     public Long getId() {
         return id;
@@ -48,11 +48,11 @@ public class Principal implements Serializable {
         this.password = password;
     }
 
-    public List<Role> getRoles() {
+    public List<PrincipalRole> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<Role> roles) {
+    public void setRoles(List<PrincipalRole> roles) {
         this.roles = roles;
     }
 }

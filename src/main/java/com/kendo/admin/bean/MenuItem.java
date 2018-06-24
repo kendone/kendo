@@ -2,14 +2,10 @@ package com.kendo.admin.bean;
 
 import java.io.Serializable;
 
-public class MenuItem implements Serializable {
+public class MenuItem extends BaseMenu implements Serializable {
 
     private static final long serialVersionUID = -7931927877381354570L;
-    private Long id;//菜单主键ID
-    private String name;//菜单名称
-    private String icon;//菜单图标
-    private Long parentId;//对应父级菜单ID
-    private Integer sort;//排序
+
     //叶子菜单对应的窗口属性,不是叶子节点该属性为空
     private Long id_;
     private String name_;//窗口名称

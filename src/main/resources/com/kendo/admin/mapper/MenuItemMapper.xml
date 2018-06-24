@@ -20,34 +20,34 @@
     <!-- MENU ITEM SELECT -->
     <select id="selectMenuItemByMenuId" resultMap="menuItemMap" parameterType="java.util.Map">
         SELECT DISTINCT
-            menus.ID,
-            menus.NAME,
-            menus.ICON,
-            menus.PARENT_ID,
-            menus.SORT,
-            windows.ID    AS WINDOW_ID,
-            windows.NAME  AS WINDOW_NAME,
-            windows.ICON  AS WINDOW_ICON,
-            windows.MODEL AS WINDOW_MODEL,
-            windows.URL   AS WINDOW_URL
-        FROM menus
-            JOIN role_menus rm
-                ON menus.ID = rm.MENU_ID
-                   AND menus.ENABLED = 1
-                   AND menus.VISIBLE = 1
+            menu.ID,
+            menu.NAME,
+            menu.ICON,
+            menu.PARENT_ID,
+            menu.SORT,
+            window.ID    AS WINDOW_ID,
+            window.NAME  AS WINDOW_NAME,
+            window.ICON  AS WINDOW_ICON,
+            window.MODEL AS WINDOW_MODEL,
+            window.URL   AS WINDOW_URL
+        FROM menu
+            JOIN role_menu rm
+                ON menu.ID = rm.MENU_ID
+                   AND menu.IS_VALID = 1
+                   AND menu.IS_SHOW = 1
                    AND rm.ROLE_ID IN
                        (
                            SELECT DISTINCT r.ID
-                           FROM role_users ru, roles r
-                           WHERE ru.NAME = r.NAME
-                                 AND r.ENABLED = 1
-                                 AND ru.USERNAME = #{userId,jdbcType=INTEGER}
+                           FROM role_user ru, role r
+                           WHERE ru.ROLE_ID = r.ID
+                                 AND r.IS_VALID = 1
+                                 AND ru.USER_ID = #{userId,jdbcType=INTEGER}
                        )
-            LEFT JOIN windows
-                ON menus.WINDOW_ID = windows.ID
-                   AND windows.IS_VALID = 1
-                   AND windows.IS_SHOW = 1
-        WHERE FIND_IN_SET(menus.ID,FN_GET_CHILD_BY_ID(#{menuId,jdbcType=INTEGER}))
+            LEFT JOIN window
+                ON menu.WINDOW_ID = window.ID
+                   AND window.IS_VALID = 1
+                   AND window.IS_SHOW = 1
+        WHERE FIND_IN_SET(menu.ID,FN_GET_CHILD_BY_ID(#{menuId,jdbcType=INTEGER}))
     </select>
 
 </mapper>

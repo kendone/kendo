@@ -23,7 +23,7 @@ public class KendoApplicationTests {
 
     @Test
     public void passwordEncoder() {
-        System.out.println(bCryptPasswordEncoder.encode("admin"));
+        System.out.println(bCryptPasswordEncoder.encode("kendo"));
     }
 
     @Test

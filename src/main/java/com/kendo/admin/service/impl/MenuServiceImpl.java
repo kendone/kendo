@@ -25,14 +25,9 @@ public class MenuServiceImpl implements MenuService {
     @Autowired
     private MenuItemMapper menuItemMapper;
 
-    @Override
-    public List<String> findLeafMenuPermissionsByUserId(Long userId) {
-        return menuMapper.selectLeafMenuPermissionsByUserId(userId);
-    }
-
-    @Override
-    public List<Menu> findAsideMenusByUserId(Long userId) {
-        return menuMapper.selectAsideMenusByUserId(userId);
+       @Override
+    public List<Menu> findMenuByUsername(String username) {
+        return menuMapper.selectMenuByUsername(username);
     }
 
     @Override

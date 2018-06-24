@@ -1,5 +1,6 @@
 package com.kendo.security;
 
+import com.kendo.admin.bean.Menu;
 import com.kendo.admin.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -7,6 +8,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.List;
 
 /**
  * @author kendone
@@ -29,9 +32,8 @@ public class IndexController {
 
         System.out.println("current user:" + username);
 
-        //List<Menu> menus = menuService.findAsideMenusByUsername('admin');
-        //List<Menu> menus = menuService.findAsideMenusByUserId(2L);
-        //model.addAttribute("menus", menus);
+        List<Menu> menus = menuService.findMenuByUsername(username);
+        model.addAttribute("menus", menus);
         return "index";
     }
 }

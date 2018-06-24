@@ -12,10 +12,8 @@ import java.util.Map;
  */
 public interface MenuService extends BaseService<Menu> {
 
-    //根据用户查询拥有的叶子菜单
-    List<String> findLeafMenuPermissionsByUserId(Long userId);
     //根据用户查询主页面侧边顶级菜单
-    List<Menu> findAsideMenusByUserId(Long userId);
+    List<Menu> findMenuByUsername(String username);
 
     MenuItems findMenuItemsByMenuId(Map<String, Object> parameters);
 

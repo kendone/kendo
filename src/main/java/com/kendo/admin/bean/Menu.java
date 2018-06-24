@@ -6,16 +6,11 @@ import java.util.Date;
 /**
  * @author kendone
  */
-public class Menu implements Serializable {
+public class Menu extends BaseMenu implements Serializable {
 
     private static final long serialVersionUID = 6111779149799570828L;
-    private Long id;//主键
-    private String name;//菜单名称
+
     private String label;//菜单提示信息
-    private Long parentId;//父节点ID
-    private Integer scale;//菜单层级
-    private Integer sort;//排序
-    private String icon;//图标样式
     private String permission;//权限
     private String expanded;//菜单展开状态true展开null/false不展开
     private Integer isLeaf;//叶子节点1是0不是
@@ -56,14 +51,6 @@ public class Menu implements Serializable {
 
     public void setParentId(Long parentId) {
         this.parentId = parentId;
-    }
-
-    public Integer getScale() {
-        return scale;
-    }
-
-    public void setScale(Integer scale) {
-        this.scale = scale;
     }
 
     public Integer getSort() {

@@ -1,7 +1,7 @@
 package com.kendo.security.service;
 
 import com.kendo.security.bean.Principal;
-import com.kendo.security.bean.Role;
+import com.kendo.security.bean.PrincipalRole;
 import com.kendo.security.mapper.PrincipalMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -37,7 +37,7 @@ public class KendoUserDetailsService implements UserDetailsService {
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(@NotNull Principal principal) {
-        String[] userRoles = principal.getRoles().stream().map(Role::getName).toArray(String[]::new);
+        String[] userRoles = principal.getRoles().stream().map(PrincipalRole::getRoleName).toArray(String[]::new);
         return AuthorityUtils.createAuthorityList(userRoles);
         //return AuthorityUtils.createAuthorityList("ROLE_USER", "ROLE_ADMIN");
     }
