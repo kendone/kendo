@@ -17,19 +17,119 @@
     <script th:src="@{/vendor/kendo/js/cultures/kendo.culture.zh-CN.min.js}"></script>
 </head>
 <body>
-<div>
-    <p>Welcome <span sec:authentication="principal.username"> User</span></p>
-    <p><a th:href="@{/logout}">Logout</a></p>
-    <div sec:authorize="hasAnyAuthority('ROLE_ADMIN','ROLE_USER')">
-        <h3>You has 'Admin' authority!</h3>
+<!-- OUTER SPLITTER -->
+<div id="outer-splitter">
+    <!-- TOP REGION -->
+    <header>
+        <ul id="top-left-menu" style="position: absolute;left:0;">
+            <li data-action="toggle-menu">
+                <i class="fa fa-toggle-off"></i><span style="margin-left: 10px;">导航</span>
+            </li>
+        </ul>
+        <ul id="top-right-menu" style="position: absolute;right: 0;">
+            <li>
+                <i class="fa fa-user-o"></i>
+                <span style="margin-left: 6px;" sec:authentication="principal.username"></span>
+                <ul>
+                    <li data-action='user-info'><i class="fa fa-leaf"></i><span>个人信息</span></li>
+                    <li data-action='user-agent'><i class="fa fa-leaf"></i><span>代理设置</span></li>
+                </ul>
+            </li>
+            <li>
+                <a th:href="@{/logout}"><i class="fa fa-sign-out"></i><span style="margin-left:6px;">退出</span></a>
+            </li>
+        </ul>
+    </header>
+    <!-- CENTER REGION -->
+    <div id="inner-splitter">
+        <!-- LEFT REGION -->
+        <nav id="left-region">
+            <!--<ul id="aside-menu">-->
+            <ul id="aside-menu" th:each="menu : ${menus}">
+                <!-- 根据当前用户的角色菜单权限加载顶级菜单资源 -->
+                <li th:title="${menu.name}" data-th-id="${menu.id}">
+                    <i th:class="${menu.icon}"></i>
+                </li>
+            </ul>
+        </nav>
+        <!-- CENTER REGION(INNER) -->
+        <div id="center-region">
+            <div id="main-tabstrip">
+                <!-- TABSTRIP HEADER -->
+                <ul>
+                    <li><i class="fa fa-home">&nbsp;</i>功能导航</li>
+                    <li><i class="fa fa-bars">&nbsp;</i>个人待办</li>
+                </ul>
+                <!-- TABSTRIP CONTENT -->
+                <div>
+                    <div id="menu-splitter">
+                        <div>
+                            <ul id="first-menu"></ul>
+                        </div>
+                        <div>
+                            <ul id="second-menu"></ul>
+                        </div>
+                        <div>
+                            <ul id="third-menu" style="margin-left: 1px;"></ul>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div id="task-grid" style="height: 100%;"></div>
+                </div>
+            </div>
+        </div>
+        <!-- RIGHT REGION -->
+        <div>中部右边导航面板</div>
     </div>
-    <p th:text="${#request.getContextPath()}"></p>
-    <img th:src="@{/images/f.jpg}"/>
+    <!-- BOTTOM REGION -->
+    <footer>
+        <p>Activiti - 工作流引擎名称</p>
+    </footer>
 </div>
+
 <script>
     $(function () {
-        console.log("jQuery is ready!");
+        core.init();
     });
+</script>
+
+<script th:src="@{/js/kendo.common.js}"></script>
+<script th:src="@{/js/kendo.core.js}"></script>
+<!--<script th:src="@{/js/kendo.task.js}"></script>-->
+
+<script type="text/x-kendo-template" id="template">
+    <div class="toolbar" style="float:right;">
+        <label class="category-label" for="category">任务状态:</label>
+        <input type="search" id="category" style="width: 150px"/>
+    </div>
+</script>
+
+<!-- THIRD LEVEL MENU TEMPLATE -->
+<script id="third-menu-tmpl" type="text/x-kendo-template">
+    # data.forEach(function(menu){ #
+    <li data-id='#= menu["id"] #' data-items-index='#= menu["index"] #' data-window-id='#menu["id_"]#'
+        data-window-name='#= menu["name_"] #' data-window-icon='#= menu["icon_"] #'
+        data-window-model='#= menu["model_"] #' data-window-url='#= menu["url_"] #'>
+        <span style="margin-right: 10px;font-size: 1.2em;" class="#= menu['icon'] #"></span>#= menu['name'] #
+    </li>
+    # }); #
+</script>
+<!-- SECOND LEVEL MENU TEMPLATE -->
+<script id="second-menu-tmpl" type="text/x-kendo-template">
+    # data.forEach(function(menu){ #
+    <li data-id="#= menu['id'] #" data-items-index="#= menu['index'] #">
+        <span style="margin-right: 10px;font-size: 1.2em;" class="#= menu['icon'] #"></span>#= menu['name'] #
+    </li>
+    # }); #
+</script>
+<!-- FIRST LEVEL TEMPLATE -->
+<script id="first-menu-tmpl" type="text/x-kendo-template">
+    # data.forEach(function(menu){ #
+    <li data-id="#= menu['id'] #" data-items-index="#= menu['index'] #">
+        <span style="margin-right: 10px;font-size: 1.2em;" class="#= menu['icon'] #"></span>#= menu['name'] #
+    </li>
+    # }); #
 </script>
 </body>
 </html>

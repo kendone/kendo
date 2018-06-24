@@ -31,6 +31,7 @@ public class KendoApplicationTests {
         Principal principal = principalMapper.selectByUsername("admin");
         principal = Objects.requireNonNull(principal, "admin not found!");
         System.out.println(principal.getName());
+        principal.getRoles().forEach((role -> System.out.println(role.getName())));
     }
 
 }

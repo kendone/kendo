@@ -1,4 +1,4 @@
-package com.kendo.api.bean;
+package com.kendo.admin.bean;
 
 import java.io.Serializable;
 

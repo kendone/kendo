@@ -7,23 +7,29 @@
         <id property="id" column="ID" jdbcType="INTEGER"/>
         <result property="name" column="NAME" jdbcType="VARCHAR"/>
         <result property="username" column="USERNAME" jdbcType="VARCHAR"/>
-        <result property="identicalName" column="IDENTICAL_NAME" jdbcType="VARCHAR"/>
         <result property="password" column="PASSWORD" jdbcType="VARCHAR"/>
-        <result property="salt" column="SALT" jdbcType="VARCHAR"/>
-        <result property="deptId" column="DEPT_ID" jdbcType="INTEGER"/>
+        <collection property="roles" ofType="role" columnPrefix="ROLE_">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+        </collection>
     </resultMap>
 
     <!-- PRINCIPAL SELECT -->
     <select id="selectByUsername" parameterType="string" resultMap="principalResultMap">
         SELECT
-            ID,
-            NAME,
-            USERNAME,
-            concat(NAME, '(', USERNAME, ')') AS IDENTICAL_NAME,
-            PASSWORD,
-            SALT,
-            DEPT_ID
-        FROM sys_user
-        WHERE USERNAME = #{username,jdbcType=VARCHAR} AND IS_VALID = 1 AND IS_STATUS = 1
+            users.ID,
+            users.NAME,
+            users.USERNAME,
+            users.PASSWORD,
+            roles.ID   AS ROLE_ID,
+            ROLES.NAME AS ROLE_NAME
+        FROM users
+            join role_users
+                on users.USERNAME = role_users.USERNAME
+            join roles
+                on role_users.NAME = roles.NAME
+        WHERE users.USERNAME = #{username,jdbcType=VARCHAR}
+              AND users.ENABLED = 1
+              AND users.STATUS = 1
     </select>
 </mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kendo.admin.mapper.MenuItemMapper">
+
+    <!--  MENU ITEM RESULTMAP -->
+
+    <resultMap id="menuItemMap" type="menuItem">
+        <id property="id" column="ID" jdbcType="INTEGER"/>
+        <result property="name" column="NAME" jdbcType="VARCHAR"/>
+        <result property="icon" column="ICON" jdbcType="VARCHAR"/>
+        <result property="parentId" column="PARENT_ID" jdbcType="INTEGER"/>
+        <result property="sort" column="SORT" jdbcType="INTEGER"/>
+        <result property="id_" column="WINDOW_ID" jdbcType="INTEGER"/>
+        <result property="name_" column="WINDOW_NAME" jdbcType="VARCHAR"/>
+        <result property="icon_" column="WINDOW_ICON" jdbcType="VARCHAR"/>
+        <result property="model_" column="WINDOW_MODEL" jdbcType="VARCHAR"/>
+        <result property="url_" column="WINDOW_URL" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- MENU ITEM SELECT -->
+    <select id="selectMenuItemByMenuId" resultMap="menuItemMap" parameterType="java.util.Map">
+        SELECT DISTINCT
+            menus.ID,
+            menus.NAME,
+            menus.ICON,
+            menus.PARENT_ID,
+            menus.SORT,
+            windows.ID    AS WINDOW_ID,
+            windows.NAME  AS WINDOW_NAME,
+            windows.ICON  AS WINDOW_ICON,
+            windows.MODEL AS WINDOW_MODEL,
+            windows.URL   AS WINDOW_URL
+        FROM menus
+            JOIN role_menus rm
+                ON menus.ID = rm.MENU_ID
+                   AND menus.ENABLED = 1
+                   AND menus.VISIBLE = 1
+                   AND rm.ROLE_ID IN
+                       (
+                           SELECT DISTINCT r.ID
+                           FROM role_users ru, roles r
+                           WHERE ru.NAME = r.NAME
+                                 AND r.ENABLED = 1
+                                 AND ru.USERNAME = #{userId,jdbcType=INTEGER}
+                       )
+            LEFT JOIN windows
+                ON menus.WINDOW_ID = windows.ID
+                   AND windows.IS_VALID = 1
+                   AND windows.IS_SHOW = 1
+        WHERE FIND_IN_SET(menus.ID,FN_GET_CHILD_BY_ID(#{menuId,jdbcType=INTEGER}))
+    </select>
+
+</mapper>

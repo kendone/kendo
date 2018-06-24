@@ -1,6 +1,7 @@
 package com.kendo.security.bean;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author kendone
@@ -12,21 +13,8 @@ public class Principal implements Serializable {
     private Long id;
     private String name;
     private String username;
-    private String identicalName;
     private String password;
-    private String salt;
-    private Long deptId;
-
-    public Principal() {
-    }
-
-    public Principal(Long id, String username, String name, String identicalName,Long deptId) {
-        this.id = id;
-        this.name = name;
-        this.username = username;
-        this.identicalName = identicalName;
-        this.deptId = deptId;
-    }
+    private List<Role> roles;
 
     public Long getId() {
         return id;
@@ -52,14 +40,6 @@ public class Principal implements Serializable {
         this.username = username;
     }
 
-    public String getIdenticalName() {
-        return identicalName;
-    }
-
-    public void setIdenticalName(String identicalName) {
-        this.identicalName = identicalName;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -68,19 +48,11 @@ public class Principal implements Serializable {
         this.password = password;
     }
 
-    public String getSalt() {
-        return salt;
+    public List<Role> getRoles() {
+        return roles;
     }
 
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
-
-    public Long getDeptId() {
-        return deptId;
-    }
-
-    public void setDeptId(Long deptId) {
-        this.deptId = deptId;
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 }

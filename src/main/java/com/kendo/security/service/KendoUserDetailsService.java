@@ -1,6 +1,7 @@
 package com.kendo.security.service;
 
 import com.kendo.security.bean.Principal;
+import com.kendo.security.bean.Role;
 import com.kendo.security.mapper.PrincipalMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -30,10 +32,13 @@ public class KendoUserDetailsService implements UserDetailsService {
         return new User(
                 principal.getUsername(),
                 principal.getPassword(),
-                getAuthorities());
+                getAuthorities(principal)
+        );
     }
 
-    private Collection<? extends GrantedAuthority> getAuthorities() {
-        return AuthorityUtils.createAuthorityList("ROLE_USER", "ROLE_ADMIN");
+    private Collection<? extends GrantedAuthority> getAuthorities(@NotNull Principal principal) {
+        String[] userRoles = principal.getRoles().stream().map(Role::getName).toArray(String[]::new);
+        return AuthorityUtils.createAuthorityList(userRoles);
+        //return AuthorityUtils.createAuthorityList("ROLE_USER", "ROLE_ADMIN");
     }
 }

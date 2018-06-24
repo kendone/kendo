@@ -1,21 +1,20 @@
-package com.kendo.api.bean;
+package com.kendo.security.bean;
 
 import java.io.Serializable;
 
 /**
  * @author kendone
  */
-public class Rank implements Serializable {
+public class Role implements Serializable {
 
-    private static final long serialVersionUID = 4658188950705119165L;
-    private Long id;
+    private Integer id;
     private String name;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

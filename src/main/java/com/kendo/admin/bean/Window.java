@@ -1,13 +1,10 @@
-package com.kendo.api.bean;
+package com.kendo.admin.bean;
 
 import java.io.Serializable;
 
-/**
- * @author kendone
- */
-public class Dept implements Serializable {
+public class Window implements Serializable {
 
-    private static final long serialVersionUID = -3958213879129833029L;
+    private static final long serialVersionUID = -8066676593205791946L;
     private Long id;
     private String name;
 

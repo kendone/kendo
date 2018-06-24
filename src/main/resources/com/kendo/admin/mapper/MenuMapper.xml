@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kendo.admin.mapper.MenuMapper">
+
+    <!-- MENU INSERT -->
+    <insert id="insertIgnoreNull" parameterType="menu" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO menus
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(name)">NAME,</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(label)">LABEL,</if>
+            <if test="parentId!=null">PARENT_ID,</if>
+            <if test="scale!=null">SCALE,</if>
+            <if test="sort!=null">SORT,</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(icon)">ICON,</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(permission)">PERMISSION,</if>
+            <if test="@com.kendo.util.StringUtil@isWhitespaceOrTrue(expanded)">EXPANDED,</if>
+            <if test="isLeaf!=null">IS_LEAF,</if>
+            <if test="isValid!=null">IS_VALID,</if>
+            <if test="isShow!=null">IS_SHOW,</if>
+            <if test="createUser.id!=null">CREATE_ID,</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(remark)">REMARK,</if>
+            <if test="window!=null">WINDOW_ID</if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(name)">#{name,jdbcType=VARCHAR},</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(label)">#{label,jdbcType=VARCHAR},</if>
+            <if test="parentId!=null">#{parentId,jdbcType=INTEGER},</if>
+            <if test="scale!=null">#{scale,jdbcType=INTEGER},</if>
+            <if test="sort!=null">#{sort,jdbcType=INTEGER},</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(icon)">#{icon,jdbcType=VARCHAR},</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(permission)">#{permission,jdbcType=VARCHAR},</if>
+            <if test="@com.kendo.util.StringUtil@isWhitespaceOrTrue(expanded)">#{expanded,jdbcType=VARCHAR},</if>
+            <if test="isLeaf!=null">#{isLeaf,jdbcType=TINYINT},</if>
+            <if test="isValid!=null">#{isValid,jdbcType=TINYINT},</if>
+            <if test="isShow!=null">#{isShow,jdbcType=TINYINT},</if>
+            <if test="createUser!=null">#{createUser.id,jdbcType=INTEGER},</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(remark)">#{remark,jdbcType=VARCHAR},</if>
+            <if test="window!=null">#{window.id,jdbcType=INTEGER}</if>
+        </trim>
+    </insert>
+
+    <!-- MENU UPDATE -->
+    <update id="update" parameterType="menu">
+        UPDATE menus
+        <trim prefix="SET ">
+            NAME = #{name,jdbcType=VARCHAR},
+            LABEL = #{label,jdbcType=VARCHAR},
+            PARENT_ID = #{parentId,jdbcType=INTEGER},
+            SCALE = #{scale,jdbcType=INTEGER},
+            SORT = #{sort,jdbcType=INTEGER},
+            ICON = #{icon,jdbcType=VARCHAR},
+            PERMISSION = #{permission,jdbcType=VARCHAR},
+            EXPANDED = #{expanded,jdbcType=VARCHAR},
+            IS_LEAF = #{isLeaf,jdbcType=TINYINT},
+            IS_VALID = #{isValid,jdbcType=TINYINT},
+            IS_SHOW = #{isShow,jdbcType=TINYINT},
+            REMARK = #{remark,jdbcType=VARCHAR},
+            WINDOW_ID = #{window.id,jdbcType=TINYINT}
+        </trim>
+        WHERE ID = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!-- MENU DELETE -->
+    <delete id="deleteByPrimaryKey" parameterType="long">
+        DELETE FROM menus
+        WHERE ID = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <!-- MENU RESULTMAP -->
+    <resultMap id="menuResultMap" type="menu">
+        <id property="id" column="ID" jdbcType="INTEGER"/>
+        <result property="name" column="NAME" jdbcType="VARCHAR"/>
+        <result property="label" column="LABEL" jdbcType="VARCHAR"/>
+        <result property="parentId" column="PARENT_ID" jdbcType="INTEGER"/>
+        <result property="scale" column="SCALE" jdbcType="INTEGER"/>
+        <result property="sort" column="SORT" jdbcType="INTEGER"/>
+        <result property="icon" column="ICON" jdbcType="VARCHAR"/>
+        <result property="permission" column="PERMISSION" jdbcType="VARCHAR"/>
+        <result property="expanded" column="EXPANDED" jdbcType="VARCHAR"/>
+        <result property="isLeaf" column="IS_LEAF" jdbcType="TINYINT"/>
+        <result property="isValid" column="IS_VALID" jdbcType="TINYINT"/>
+        <result property="isShow" column="IS_SHOW" jdbcType="TINYINT"/>
+        <result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="remark" column="REMARK" jdbcType="VARCHAR"/>
+        <association property="createUser" column="CREATE_ID" javaType="user" columnPrefix="CREATE_">
+            <id property="id" column="ID" jdbcType="INTEGER"/>
+            <result property="identicalName" column="IDENTICAL_NAME" jdbcType="VARCHAR"/>
+        </association>
+        <association property="window" column="WINDOW_ID" javaType="window" columnPrefix="WINDOW_">
+            <id property="id" column="ID" jdbcType="INTEGER"/>
+            <result property="name" column="NAME" jdbcType="VARCHAR"/>
+        </association>
+    </resultMap>
+
+    <!-- MENU SELECT -->
+    <select id="selectLeafMenuPermissionsByUserId" parameterType="java.lang.Long" resultType="java.lang.String">
+        SELECT DISTINCT menus.PERMISSION
+        FROM menus
+            JOIN sys_role_menu rm
+                ON menus.ID = rm.MENU_ID
+                   AND menus.IS_VALID = 1
+                   AND menus.IS_SHOW = 1
+                   AND menus.IS_LEAF = 1
+                   AND menus.PERMISSION IS NOT NULL
+                   AND rm.ROLE_ID IN
+                       (
+                           SELECT DISTINCT r.ID
+                           FROM sys_role_user ru, sys_role r
+                           WHERE ru.ROLE_ID = r.ID
+                                 AND r.IS_VALID = 1
+                                 AND ru.USER_ID = #{userId,jdbcType=INTEGER}
+                       )
+    </select>
+
+    <select id="selectAsideMenusByUserId" parameterType="long" resultType="menu">
+        SELECT DISTINCT
+            menu.ID,
+            menu.NAME,
+            menu.ICON
+        FROM menus menu, sys_role_user ru, sys_role_menu rm, sys_role role
+        WHERE menu.IS_VALID = 1
+              AND menu.PARENT_ID = 1
+              AND menu.ID = rm.MENU_ID
+              AND ru.ROLE_ID = rm.ROLE_ID
+              AND role.IS_VALID = 1
+              AND ru.USER_ID = #{userId,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectValidMenu" parameterType="long" resultType="menu">
+        SELECT
+            ID,
+            NAME,
+            ICON,
+            PARENT_ID,
+            SCALE,
+            IS_LEAF
+        FROM menus
+        WHERE IS_VALID = 1
+              AND PARENT_ID IS NOT NULL
+              AND SCALE IS NOT NULL
+              --         <![CDATA[AND scale <> 0]]>
+              AND IS_SHOW = 1
+        ORDER BY PARENT_ID, SORT ASC
+    </select>
+
+    <select id="selectAll" resultMap="menuResultMap">
+        SELECT
+            menus.ID,
+            menus.NAME,
+            menus.LABEL,
+            menus.PARENT_ID,
+            menus.SCALE,
+            menus.SORT,
+            menus.PERMISSION,
+            menus.ICON,
+            menus.EXPANDED,
+            menus.IS_LEAF,
+            menus.WINDOW_ID,
+            open_window.NAME           AS WINDOW_NAME,
+            menus.IS_VALID,
+            menus.IS_SHOW,
+            menus.CREATE_ID         AS CREATE_ID,
+            create_user.IDENTICAL_NAME AS CREATE_IDENTICAL_NAME,
+            menus.CREATE_TIME,
+            menus.REMARK
+        FROM menus
+            LEFT JOIN sys_window open_window
+                ON menus.WINDOW_ID = open_window.ID
+            LEFT JOIN v_sys_user create_user
+                ON menus.CREATE_ID = create_user.ID
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="long" resultMap="menuResultMap">
+        SELECT
+            menus.ID,
+            menus.NAME,
+            menus.LABEL,
+            menus.PARENT_ID,
+            menus.SCALE,
+            menus.SORT,
+            menus.PERMISSION,
+            menus.ICON,
+            menus.EXPANDED,
+            menus.IS_LEAF,
+            menus.WINDOW_ID   AS WINDOW_ID,
+            open_window.NAME     AS WINDOW_NAME,
+            menus.IS_VALID,
+            menus.IS_SHOW,
+            menus.CREATE_ID   AS CREATE_ID,
+            create_user.USERNAME AS CREATE_USERNAME,
+            create_user.NAME     AS CREATE_NAME,
+            menus.CREATE_TIME,
+            menus.REMARK
+        FROM menus
+            LEFT JOIN sys_window open_window
+                ON menus.WINDOW_ID = open_window.ID
+            LEFT JOIN sys_user create_user
+                ON menus.CREATE_ID = create_user.ID
+        WHERE menus.ID = #{id,jdbcType=INTEGER}
+    </select>
+
+</mapper>
