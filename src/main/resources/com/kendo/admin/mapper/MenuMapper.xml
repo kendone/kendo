@@ -16,7 +16,7 @@
             <if test="isLeaf!=null">IS_LEAF,</if>
             <if test="isValid!=null">IS_VALID,</if>
             <if test="isShow!=null">IS_SHOW,</if>
-            <if test="createUser.id!=null">CREATE_ID,</if>
+            <if test="createUser!=null">CREATE_USER,</if>
             <if test="@com.kendo.util.StringUtil@isNotEmpty(remark)">REMARK,</if>
             <if test="window!=null">WINDOW_ID</if>
         </trim>
@@ -31,7 +31,7 @@
             <if test="isLeaf!=null">#{isLeaf,jdbcType=TINYINT},</if>
             <if test="isValid!=null">#{isValid,jdbcType=TINYINT},</if>
             <if test="isShow!=null">#{isShow,jdbcType=TINYINT},</if>
-            <if test="createUser!=null">#{createUser.id,jdbcType=INTEGER},</if>
+            <if test="createUser!=null">#{createUser.username,jdbcType=VARCHAR},</if>
             <if test="@com.kendo.util.StringUtil@isNotEmpty(remark)">#{remark,jdbcType=VARCHAR},</if>
             <if test="window!=null">#{window.id,jdbcType=INTEGER}</if>
         </trim>
@@ -80,7 +80,7 @@
         <result property="remark" column="REMARK" jdbcType="VARCHAR"/>
         <association property="createUser" column="CREATE_USER" javaType="user" columnPrefix="CREATE_">
             <id property="username" column="USERNAME" jdbcType="VARCHAR"/>
-            <result property="identicalName" column="IDENTICAL_NAME" jdbcType="VARCHAR"/>
+            <result property="name" column="NAME" jdbcType="VARCHAR"/>
         </association>
         <association property="window" column="WINDOW_ID" javaType="window" columnPrefix="WINDOW_">
             <id property="id" column="ID" jdbcType="INTEGER"/>
@@ -135,7 +135,7 @@
             menu.IS_VALID,
             menu.IS_SHOW,
             menu.CREATE_USER           AS CREATE_USERNAME,
-            create_user.IDENTICAL_NAME AS CREATE_IDENTICAL_NAME,
+            create_user.NAME AS CREATE_NAME,
             menu.CREATE_TIME,
             menu.REMARK
         FROM menu
@@ -160,9 +160,8 @@
             open_window.NAME     AS WINDOW_NAME,
             menu.IS_VALID,
             menu.IS_SHOW,
-            menu.CREATE_USER     AS CREATE_ID,
-            create_user.USERNAME AS CREATE_USERNAME,
-            create_user.NAME     AS CREATE_NAME,
+            menu.CREATE_USER     AS CREATE_USERNAME,
+            create_user.NAME AS CREATE_NAME,
             menu.CREATE_TIME,
             menu.REMARK
         FROM menu
