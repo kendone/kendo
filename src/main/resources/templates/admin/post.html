@@ -1,0 +1,168 @@
+<div id="admin-post-grid" style="height: 100%;"></div>
+<script>
+    $(function () {
+
+        var adminPost = (function () {
+            var init,
+                model,
+                dataSource,
+                columns,
+                $grid,
+                grid;
+
+            model = kendo.data.Model.define({
+                id: "id",
+                fields: {
+                    id: {type: "number", editable: false, nullable: true},
+                    name: {validation: {required: true}},
+                    type: {type: "number", validation: {required: true}, defaultValue: 1},
+                    category: {type: "number", validation: {required: true}, defaultValue: 1},
+                    sort: {type: "number", defaultValue: 1},
+                    enabled: {type: "number", defaultValue: 1},
+                    info: {nullable: true},
+                    createUser: {
+                        type: 'object',
+                        editable: false,
+                        nullable:false,
+                        defaultValue: {id: 'kendo', name: 'admin'}
+                    },
+                    createTime: {type: "date", nullable: true, editable: false},
+                    remark: {nullable: true}
+                }
+            });
+            dataSource = new kendo.data.DataSource({
+                transport: {
+                    create: {
+                        type: "POST",
+                        url: contextPath + "/admin/post/create",
+                        dataType: "json",
+                        contentType: "application/json"
+                    },
+                    read: {
+                        type: "GET",
+                        url: contextPath + "/admin/post/read",
+                        dataType: "json",
+                        contentType: "application/x-www-form-urlencoded; charset=UTF-8"
+                    },
+                    destroy: {
+                        type: "DELETE",
+                        url: contextPath + "/admin/post/destroy",
+                        dataType: "json",
+                        contentType: "application/json"
+                    },
+                    update: {
+                        type: "PUT",
+                        url: contextPath + "/admin/post/update",
+                        dataType: "json",
+                        contentType: "application/json"
+                    },
+                    parameterMap: function (options, operation) {
+                        if (operation === "read") {
+                            return {page: options.page, pageSize: options.pageSize};
+                        } else {
+                            if (options.createTime) {
+                                options.createTime = kendo.toString(options.createTime, common.convention.dateTimeFormat);
+                            }
+                            return kendo.stringify(options);
+                        }
+                    }
+                },
+                schema: {
+                    model: model,
+                    data: "items",
+                    total: "itemCount",
+                    errors: "error"
+                },
+                error: function (e) {
+                    var error;
+
+                    if (e && e.xhr && e.xhr.responseText) {
+                        error = JSON.parse(e.xhr.responseText);
+                        kendo.alert(error.error ? error.error : e.status);
+                    }
+                },
+                serverPaging: true,
+                pageSize: 14
+            });
+            columns = [
+                {
+                    title: "序号",
+                    width: 50,
+                    template: "<span class='row-number'></span>",
+                    attributes: common.config.ALIGNCENTER
+                },
+                {field: "name", title: "岗位名称"},
+                {
+                    field: "type",
+                    title: "岗位类型",
+                    width: 120,
+                    values: [{value: 1, text: "单位创建"}, {value: 0, text: "系统创建"}]
+                },
+                {
+                    field: "category",
+                    title: "岗位类别",
+                    width: 120,
+                    values: [{value: 1, text: "行政类"}, {value: 2, text: "管理类"}, {value: 3, text: "技术类"}]
+                },
+                {field: "sort", title: "排序", width: 80, format: "{0:#}"},
+                {
+                    field: "enabled",
+                    title: "是否有效",
+                    width: 80,
+                    values: [{value: 1, text: "有效"}, {value: 0, text: "无效"}],
+                    attributes: common.config.ALIGNCENTER
+                },
+                {field: "info", title: "岗位描述"},
+                {
+                    field: "createUser", title: "创建人", width: 110,
+                    template: '#if(createUser){# #=createUser.name# #}#',
+                    attributes: common.config.ALIGNCENTER
+                },
+                {
+                    field: "createTime",
+                    title: "创建时间",
+                    width: 95,
+                    format: common.convention.kDateFormat,
+                    attributes: common.config.ALIGNCENTER
+                },
+                {field: "remark", title: "备注", width: 80},
+                {command: ["edit", "destroy"], width: 150}
+            ];
+            $grid = $("#admin-post-grid");
+
+            init = function () {
+                //INIT GRID TABLE
+                $grid.kendoGrid({
+                    editable: {
+                        mode: 'inline',
+                        confirmation: true,
+                        createAt: "top",
+                        destroy: true,
+                        update: true
+                    },
+                    columns: columns,
+                    toolbar: ['create'],
+                    dataSource: dataSource,
+                    noRecords: true,
+                    pageable: common.config.PAGEABLE
+                });
+                grid = $grid.data("kendoGrid");
+                //EVENTS
+                grid.bind("dataBound", function () {
+                    var rows = this.items();
+                    var page = this.pager.page() - 1;
+                    var pageSize = this.pager.pageSize();
+                    $(rows).each(function () {
+                        var index = $(this).index() + 1 + page * pageSize;
+                        var rowLabel = $(this).find(".row-number");
+                        $(rowLabel).html(index);
+                    });
+                });
+            };
+
+            return {init: init};
+        })();
+
+        adminPost.init();
+    });
+</script>

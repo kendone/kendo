@@ -90,23 +90,23 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public Menu get(Long id) {
+    public Menu get(final Long id) {
         return menuMapper.selectByPrimaryKey(id);
     }
 
     @Override
-    public void delete(Menu entity) {
+    public void delete(final Menu entity) {
         menuMapper.deleteByPrimaryKey(entity.getId());
     }
 
     @Override
-    public Menu add(Menu entity) {
+    public Menu add(final Menu entity) {
         menuMapper.insertIgnoreNull(entity);
         return entity;
     }
 
     @Override
-    public boolean update(Menu entity) {
+    public boolean update(final Menu entity) {
         return menuMapper.update(entity) > 0;
     }
 }

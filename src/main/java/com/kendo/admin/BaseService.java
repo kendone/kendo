@@ -5,11 +5,11 @@ package com.kendo.admin;
  */
 public interface BaseService<T> {
 
-    T get(Long id);
+    T get(final Long id);
 
-    T add(T entity);
+    T add(final T entity);
 
-    boolean update(T entity);
+    boolean update(final T entity);
 
-    void delete(T entity);
+    void delete(final T entity);
 }

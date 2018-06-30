@@ -3,7 +3,6 @@ package com.kendo.admin.bean;
 import java.io.Serializable;
 
 public class MenuWindow extends AbstractMenu implements Serializable {
-
     private static final long serialVersionUID = -7931927877381354570L;
 
     //叶子菜单对应的窗口属性,不是叶子节点该属性为空

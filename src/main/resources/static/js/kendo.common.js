@@ -13,7 +13,6 @@ var common = (function ($) {
 
         config: {
             ALIGNCENTER: {style: "text-align: center"},
-
             PAGEABLE: {
                 pageSize: 14,
                 previousNext: true,
@@ -34,7 +33,6 @@ var common = (function ($) {
                     refresh: "刷新"
                 }
             },
-
             MESSAGES: {
                 noRows: "没有可用的记录",
                 loading: "努力加载数据中……",
@@ -135,7 +133,7 @@ var common = (function ($) {
             transport: {
                 read: {
                     type: "GET",
-                    url: root + "/common/users",
+                    url: contextPath + "/api/users",
                     dataType: "json"
                 }
             }
@@ -153,10 +151,10 @@ var common = (function ($) {
             autoBind: true,
             delay: 1000,
             dataValueField: "id",
-            dataTextField: "identicalName",
+            dataTextField: "name",
             text: "",
             value: null,
-            optionsLabel: {id: null, identicalName: "请选择人员"},
+            optionsLabel: {id: null, name: "请选择人员"},
             dataSource: dataSource,
             filter: "contains"
         }).data("kendoDropDownList");
@@ -185,7 +183,7 @@ var common = (function ($) {
             transport: {
                 read: {
                     type: "GET",
-                    url: root + "/common/depts",
+                    url: contextPath + "/api/depts",
                     dataType: "json"
                 }
             }
@@ -245,7 +243,7 @@ var common = (function ($) {
             transport: {
                 read: {
                     type: "GET",
-                    url: root + "/common/posts",
+                    url: contextPath + "/api/posts",
                     dataType: "json"
                 }
             }
@@ -301,7 +299,7 @@ var common = (function ($) {
             transport: {
                 read: {
                     type: "GET",
-                    url: root + "/sysmgr/rank/data",
+                    url: contextPath + "/sysmgr/rank/data",
                     dataType: "json"
                 }
             }

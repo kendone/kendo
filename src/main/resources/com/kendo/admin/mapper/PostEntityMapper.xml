@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kendo.admin.mapper.PostEntityMapper">
+
+    <!-- POST INSERT -->
+    <insert id="insertIgnoreNull" parameterType="postEntity" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO post
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(name)">NAME,</if>
+            <if test="type!=null">TYPE,</if>
+            <if test="category!=null">CATEGORY ,</if>
+            <if test="sort!=null">SORT ,</if>
+            <if test="enabled!=null">ENABLED ,</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(info)">INFO ,</if>
+            <if test="createUser!=null">CREATE_ID ,</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(remark)">REMARK</if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(name)">#{name,jdbcType=VARCHAR},</if>
+            <if test="type!=null">#{type,jdbcType=INTEGER},</if>
+            <if test="category!=null">#{category,jdbcType=INTEGER},</if>
+            <if test="sort!=null">#{sort,jdbcType=INTEGER},</if>
+            <if test="enabled!=null">#{enabled,jdbcType=TINYINT},</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(info)">#{info,jdbcType=VARCHAR},</if>
+            <if test="createUser!=null">#{createUser.id,jdbcType=INTEGER},</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(remark)">#{remark,jdbcType=VARCHAR}</if>
+        </trim>
+    </insert>
+
+    <!-- POST UPDATE -->
+    <update id="update" parameterType="postEntity">
+        UPDATE post
+        <set>
+            NAME = #{name,jdbcType=VARCHAR},
+            TYPE = #{type,jdbcType=INTEGER},
+            CATEGORY = #{category,jdbcType=INTEGER},
+            SORT = #{sort,jdbcType=INTEGER},
+            ENABLED = #{enabled,jdbcType=TINYINT},
+            INFO = #{info,jdbcType=VARCHAR},
+            REMARK = #{remark,jdbcType=VARCHAR}
+        </set>
+        WHERE ID = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!-- POST DELETE -->
+    <delete id="deleteByPrimaryKey" parameterType="long">
+        DELETE FROM post
+        WHERE ID = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <!-- POST RESULTMAP -->
+    <resultMap id="postEntityResultMap" type="postEntity">
+        <id property="id" column="ID" jdbcType="INTEGER"/>
+        <result property="name" column="NAME" jdbcType="VARCHAR"/>
+        <result property="type" column="TYPE" jdbcType="INTEGER"/>
+        <result property="category" column="CATEGORY" jdbcType="INTEGER"/>
+        <result property="sort" column="SORT" jdbcType="INTEGER"/>
+        <result property="enabled" column="ENABLED" jdbcType="TINYINT"/>
+        <result property="info" column="INFO" jdbcType="VARCHAR"/>
+        <result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+        <result property="remark" column="REMARK" jdbcType="VARCHAR"/>
+        <association property="createUser" column="CREATE_ID" javaType="user" columnPrefix="CREATE_">
+            <id property="id" column="ID" jdbcType="INTEGER"/>
+            <result property="name" column="NAME" jdbcType="VARCHAR"/>
+        </association>
+    </resultMap>
+
+    <!-- POST SELECT -->
+    <select id="selectAll" resultMap="postEntityResultMap">
+        SELECT
+            post.ID,
+            post.NAME,
+            post.TYPE,
+            post.CATEGORY,
+            post.SORT,
+            post.ENABLED,
+            post.INFO,
+            post.CREATE_ID AS CREATE_ID,
+            user.NAME      AS CREATE_NAME,
+            post.CREATE_TIME,
+            post.REMARK
+        FROM post
+            LEFT JOIN user
+                ON post.CREATE_ID = user.ID
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="long" resultMap="postEntityResultMap">
+        SELECT
+            post.ID,
+            post.NAME,
+            post.TYPE,
+            post.CATEGORY,
+            post.SORT,
+            post.ENABLED,
+            post.INFO,
+            post.CREATE_ID AS CREATE_ID,
+            user.NAME      AS CREATE_NAME,
+            post.CREATE_TIME,
+            post.REMARK
+        FROM post
+            LEFT JOIN user
+                ON post.CREATE_ID = user.ID
+        WHERE post.ID = #{id,jdbcType=INTEGER}
+    </select>
+</mapper>

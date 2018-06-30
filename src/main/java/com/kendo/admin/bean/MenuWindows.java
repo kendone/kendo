@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MenuWindows extends MenuWindow {
-
     private static final long serialVersionUID = -339999134691329994L;
+
     private List<MenuWindows> items = new ArrayList<>();
 
     public List<MenuWindows> getItems() {

@@ -1,5 +1,8 @@
 package com.kendo.admin.bean;
 
+import com.kendo.api.bean.User;
+import com.kendo.api.bean.Window;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -7,11 +10,10 @@ import java.util.Date;
  * @author kendone
  */
 public class Menu extends AbstractMenu implements Serializable {
-
     private static final long serialVersionUID = 6111779149799570828L;
 
     private String label;
-    private String permission;//权限
+    private String permission;
     private String expanded;//菜单展开状态true展开null/false不展开
     private Integer isLeaf;//叶子节点1是0不是
     private Integer enabled;//菜单状态1有效0无效

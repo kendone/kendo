@@ -45,7 +45,7 @@ var core = (function () {
 
         $.ajax({
             type: "post",
-            url: root + "/menu/navigation-menus",
+            url: contextPath + "/menu/navigation-menus",
             data: {menuId: options.menuId},
             contentType: "application/x-www-form-urlencoded",
             dataType: "json",
@@ -188,7 +188,7 @@ var core = (function () {
                 case "user-info": {
                     var win = $("<div></div>").kendoWindow({
                         title: "个人信息",
-                        content: root + "/user/info",
+                        content: contextPath + "/user/info",
                         modal: true,
                         animation: {open: {effects: 'fade:in'}},
                         resizable: false,
@@ -261,7 +261,7 @@ var core = (function () {
             text.push(name);
             text.push('<span data-action="close" id="opened-menu-' + openedMenuId + '" class="k-link"><span class="k-icon k-font-icon k-i-x"></span></span>');
 
-            contentUrl.push(root);
+            contentUrl.push(contextPath);
             contentUrl.push(model);
             contentUrl.push(url);
             if (contentUrl.length > 0) {
