@@ -6,6 +6,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface PrincipalMapper {
 
-    Principal selectByUsername(String username);
+    Principal selectByUsername(String id);
 
 }

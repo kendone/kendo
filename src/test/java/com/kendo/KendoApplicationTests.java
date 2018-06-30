@@ -30,7 +30,7 @@ public class KendoApplicationTests {
     @Test
     public void selectAll(){
         List<Menu> menus = menuMapper.selectAll();
-        System.out.println(menus.get(0).getCreateUser().getUsername());
+        System.out.println(menus.get(0).getCreateUser().getName());
     }
 
     @Test

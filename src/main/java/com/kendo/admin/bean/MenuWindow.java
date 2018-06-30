@@ -2,7 +2,7 @@ package com.kendo.admin.bean;
 
 import java.io.Serializable;
 
-public class MenuItem extends BaseMenu implements Serializable {
+public class MenuWindow extends AbstractMenu implements Serializable {
 
     private static final long serialVersionUID = -7931927877381354570L;
 

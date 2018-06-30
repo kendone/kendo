@@ -25,19 +25,19 @@ public class KendoUserDetailsService implements UserDetailsService {
     private PrincipalMapper principalMapper;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Principal principal = principalMapper.selectByUsername(username);
-        principal = Objects.requireNonNull(principal, () -> username + " not found!");
+    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
+        Principal principal = principalMapper.selectByUsername(id);
+        principal = Objects.requireNonNull(principal, () -> id + " not found!");
 
         return new User(
-                principal.getUsername(),
+                principal.getId(),
                 principal.getPassword(),
                 getAuthorities(principal)
         );
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(@NotNull Principal principal) {
-        String[] userRoles = principal.getRoles().stream().map(PrincipalRole::getRoleName).toArray(String[]::new);
+        String[] userRoles = principal.getRoles().stream().map(PrincipalRole::getId).toArray(String[]::new);
         return AuthorityUtils.createAuthorityList(userRoles);
         //return AuthorityUtils.createAuthorityList("ROLE_USER", "ROLE_ADMIN");
     }

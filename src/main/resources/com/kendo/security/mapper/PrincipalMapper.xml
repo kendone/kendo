@@ -4,14 +4,12 @@
 
     <!-- PRINCIPAL RESULTMAP -->
     <resultMap id="principalResultMap" type="principal">
-        <id property="id" column="ID" jdbcType="INTEGER"/>
+        <id property="id" column="ID" jdbcType="VARCHAR"/>
         <result property="name" column="NAME" jdbcType="VARCHAR"/>
-        <result property="username" column="USERNAME" jdbcType="VARCHAR"/>
         <result property="password" column="PASSWORD" jdbcType="VARCHAR"/>
         <collection property="roles" ofType="principalRole" columnPrefix="ROLE_">
-            <id property="id" column="ID" jdbcType="INTEGER"/>
+            <id property="id" column="ID" jdbcType="VARCHAR"/>
             <result property="name" column="NAME" jdbcType="VARCHAR"/>
-            <result property="roleName" column="ROLE_NAME" jdbcType="VARCHAR"/>
         </collection>
     </resultMap>
 
@@ -20,18 +18,16 @@
         SELECT
             user.ID,
             user.NAME,
-            user.USERNAME,
             user.PASSWORD,
-            role.ID        AS ROLE_ID,
-            role.NAME      AS ROLE_NAME,
-            role.ROLE_NAME AS ROLE_ROLE_NAME
+            role.ID   AS ROLE_ID,
+            role.NAME AS ROLE_NAME
         FROM user
             join role_user
-                on user.USERNAME = role_user.USERNAME
+                on user.ID = role_user.USER_ID
             join role
-                on role_user.ROLE_NAME = role.ROLE_NAME
-        WHERE user.USERNAME = #{username,jdbcType=VARCHAR}
-              AND user.IS_VALID = 1
-              AND user.IS_STATUS = 1
+                on role.ID = role_user.ROLE_ID
+        WHERE user.ID = #{id,jdbcType=VARCHAR}
+              AND user.ENABLED = 1
+              AND user.STATUS = 1
     </select>
 </mapper>

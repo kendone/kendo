@@ -13,7 +13,7 @@ import java.util.List;
 public interface MenuMapper extends BaseMapper<Menu> {
 
     //根据用户查询顶级菜单
-    List<Menu> selectMenuByUsername(String username);
+    List<Menu> selectMenuByUsername(String id);
 
     //根据角色查询用户的菜单,目前没有和角色进行关联后期补充
     List<Menu> selectValidMenu();

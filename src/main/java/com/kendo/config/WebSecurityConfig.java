@@ -63,6 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //.rememberMe()
                 //.and()
                 .exceptionHandling()
-                .accessDeniedPage("/denied");
+                .accessDeniedPage("/denied")
+                .and().csrf().disable();
     }
 }

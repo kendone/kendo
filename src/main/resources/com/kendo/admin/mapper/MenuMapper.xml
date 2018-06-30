@@ -14,9 +14,9 @@
             <if test="@com.kendo.util.StringUtil@isNotEmpty(permission)">PERMISSION,</if>
             <if test="@com.kendo.util.StringUtil@isWhitespaceOrTrue(expanded)">EXPANDED,</if>
             <if test="isLeaf!=null">IS_LEAF,</if>
-            <if test="isValid!=null">IS_VALID,</if>
-            <if test="isShow!=null">IS_SHOW,</if>
-            <if test="createUser!=null">CREATE_USER,</if>
+            <if test="enabled!=null">ENABLED,</if>
+            <if test="visible!=null">VISIBLE,</if>
+            <if test="createUser!=null">CREATE_ID,</if>
             <if test="@com.kendo.util.StringUtil@isNotEmpty(remark)">REMARK,</if>
             <if test="window!=null">WINDOW_ID</if>
         </trim>
@@ -29,9 +29,9 @@
             <if test="@com.kendo.util.StringUtil@isNotEmpty(permission)">#{permission,jdbcType=VARCHAR},</if>
             <if test="@com.kendo.util.StringUtil@isWhitespaceOrTrue(expanded)">#{expanded,jdbcType=VARCHAR},</if>
             <if test="isLeaf!=null">#{isLeaf,jdbcType=TINYINT},</if>
-            <if test="isValid!=null">#{isValid,jdbcType=TINYINT},</if>
-            <if test="isShow!=null">#{isShow,jdbcType=TINYINT},</if>
-            <if test="createUser!=null">#{createUser.username,jdbcType=VARCHAR},</if>
+            <if test="enabled!=null">#{enabled,jdbcType=TINYINT},</if>
+            <if test="visible!=null">#{visible,jdbcType=TINYINT},</if>
+            <if test="createUser!=null">#{createUser.id,jdbcType=VARCHAR},</if>
             <if test="@com.kendo.util.StringUtil@isNotEmpty(remark)">#{remark,jdbcType=VARCHAR},</if>
             <if test="window!=null">#{window.id,jdbcType=INTEGER}</if>
         </trim>
@@ -49,18 +49,18 @@
             PERMISSION = #{permission,jdbcType=VARCHAR},
             EXPANDED = #{expanded,jdbcType=VARCHAR},
             IS_LEAF = #{isLeaf,jdbcType=TINYINT},
-            IS_VALID = #{isValid,jdbcType=TINYINT},
-            IS_SHOW = #{isShow,jdbcType=TINYINT},
+            ENABLED = #{enabled,jdbcType=TINYINT},
+            'VISIBLE' = #{visible,jdbcType=TINYINT},
             REMARK = #{remark,jdbcType=VARCHAR},
-            WINDOW_ID = #{window.id,jdbcType=TINYINT}
+            WINDOW_ID = #{window.id,jdbcType=INTEGER}
         </trim>
-        WHERE ID = #{id,jdbcType=INTEGER}
+        WHERE ID = #{id,jdbcType=VARCHAR}
     </update>
 
     <!-- MENU DELETE -->
-    <delete id="deleteByPrimaryKey" parameterType="long">
+    <delete id="deleteByPrimaryKey" parameterType="string">
         DELETE FROM menu
-        WHERE ID = #{id,jdbcType=INTEGER}
+        WHERE ID = #{id,jdbcType=VARCHAR}
     </delete>
 
     <!-- MENU RESULTMAP -->
@@ -74,12 +74,12 @@
         <result property="permission" column="PERMISSION" jdbcType="VARCHAR"/>
         <result property="expanded" column="EXPANDED" jdbcType="VARCHAR"/>
         <result property="isLeaf" column="IS_LEAF" jdbcType="TINYINT"/>
-        <result property="isValid" column="IS_VALID" jdbcType="TINYINT"/>
-        <result property="isShow" column="IS_SHOW" jdbcType="TINYINT"/>
+        <result property="enabled" column="ENABLED" jdbcType="TINYINT"/>
+        <result property="visible" column="VISIBLE" jdbcType="TINYINT"/>
         <result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
         <result property="remark" column="REMARK" jdbcType="VARCHAR"/>
-        <association property="createUser" column="CREATE_USER" javaType="user" columnPrefix="CREATE_">
-            <id property="username" column="USERNAME" jdbcType="VARCHAR"/>
+        <association property="createUser" column="CREATE_ID" javaType="user" columnPrefix="CREATE_">
+            <id property="id" column="ID" jdbcType="VARCHAR"/>
             <result property="name" column="NAME" jdbcType="VARCHAR"/>
         </association>
         <association property="window" column="WINDOW_ID" javaType="window" columnPrefix="WINDOW_">
@@ -94,14 +94,14 @@
             menu.ID,
             menu.NAME,
             menu.ICON
-        FROM menu menu, role_user ru,
-            role_menu rm, role role
-        WHERE menu.IS_VALID = 1
+        FROM menu, role_user ru,
+            role_menu rm, role
+        WHERE menu.ENABLED = 1
               AND menu.PARENT_ID = 1
               AND menu.ID = rm.MENU_ID
-              AND ru.ROLE_NAME = rm.ROLE_NAME
-              AND role.IS_VALID = 1
-              AND ru.USERNAME = #{username,jdbcType=VARCHAR}
+              AND ru.ROLE_ID = rm.ROLE_ID
+              AND role.ENABLED = 1
+              AND ru.USER_ID = #{ID,jdbcType=VARCHAR}
     </select>
 
     <select id="selectValidMenus" parameterType="long" resultType="menu">
@@ -112,10 +112,10 @@
             PARENT_ID,
             IS_LEAF
         FROM menu
-        WHERE IS_VALID = 1
+        WHERE ENABLED = 1
               AND PARENT_ID IS NOT NULL
               --         <![CDATA[AND scale <> 0]]>
-              AND IS_SHOW = 1
+              AND VISIBLE = 1
         ORDER BY PARENT_ID, SORT ASC
     </select>
 
@@ -131,18 +131,18 @@
             menu.EXPANDED,
             menu.IS_LEAF,
             menu.WINDOW_ID,
-            open_window.NAME           AS WINDOW_NAME,
-            menu.IS_VALID,
-            menu.IS_SHOW,
-            menu.CREATE_USER           AS CREATE_USERNAME,
-            create_user.NAME AS CREATE_NAME,
+            open_window.NAME AS WINDOW_NAME,
+            menu.ENABLED,
+            menu.VISIBLE,
+            menu.CREATE_ID,
+            user.NAME        AS CREATE_NAME,
             menu.CREATE_TIME,
             menu.REMARK
         FROM menu
             LEFT JOIN window open_window
                 ON menu.WINDOW_ID = open_window.ID
-            LEFT JOIN v_sys_user create_user
-                ON menu.CREATE_USER = create_user.USERNAME
+            LEFT JOIN user
+                ON menu.CREATE_ID = user.ID
     </select>
 
     <select id="selectByPrimaryKey" parameterType="long" resultMap="menuResultMap">
@@ -156,11 +156,11 @@
             menu.ICON,
             menu.EXPANDED,
             menu.IS_LEAF,
-            menu.WINDOW_ID       AS WINDOW_ID,
-            open_window.NAME     AS WINDOW_NAME,
-            menu.IS_VALID,
-            menu.IS_SHOW,
-            menu.CREATE_USER     AS CREATE_USERNAME,
+            menu.WINDOW_ID,
+            open_window.NAME AS WINDOW_NAME,
+            menu.ENABLED,
+            menu.VISIBLE,
+            menu.CREATE_ID,
             create_user.NAME AS CREATE_NAME,
             menu.CREATE_TIME,
             menu.REMARK
@@ -168,7 +168,7 @@
             LEFT JOIN window open_window
                 ON menu.WINDOW_ID = open_window.ID
             LEFT JOIN user create_user
-                ON menu.CREATE_USER = create_user.USERNAME
+                ON menu.CREATE_ID = create_user.ID
         WHERE menu.ID = #{id,jdbcType=INTEGER}
     </select>
 

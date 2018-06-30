@@ -62,7 +62,7 @@ var core = (function () {
             panes: [
                 {collapsed: false, collapsible: false, scrollable: false, resizable: false, size: '32px'},
                 {resizable: false, collapsible: false, scrollable: false},
-                {resizable: false, collapsed: true, collapsible: true, scrollable: false, size: '32px'}
+                {resizable: false, collapsed: true, collapsible: true, scrollable: false, size: '200px'}
             ]
         });
         //INNER SPLITTER

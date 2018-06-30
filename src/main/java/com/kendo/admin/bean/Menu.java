@@ -6,16 +6,16 @@ import java.util.Date;
 /**
  * @author kendone
  */
-public class Menu extends BaseMenu implements Serializable {
+public class Menu extends AbstractMenu implements Serializable {
 
     private static final long serialVersionUID = 6111779149799570828L;
 
-    private String label;//菜单提示信息
+    private String label;
     private String permission;//权限
     private String expanded;//菜单展开状态true展开null/false不展开
     private Integer isLeaf;//叶子节点1是0不是
-    private Integer isValid;//菜单状态1有效0无效
-    private Integer isShow;//是否显示1显示0隐藏
+    private Integer enabled;//菜单状态1有效0无效
+    private Integer visible;//是否显示1显示0隐藏
     private User createUser;//创建人
     private Date createTime;//创建时间
     private String remark;//备注
@@ -93,20 +93,20 @@ public class Menu extends BaseMenu implements Serializable {
         this.isLeaf = isLeaf;
     }
 
-    public Integer getIsValid() {
-        return isValid;
+    public Integer getEnabled() {
+        return enabled;
     }
 
-    public void setIsValid(Integer isValid) {
-        this.isValid = isValid;
+    public void setEnabled(Integer enabled) {
+        this.enabled = enabled;
     }
 
-    public Integer getIsShow() {
-        return isShow;
+    public Integer getVisible() {
+        return visible;
     }
 
-    public void setIsShow(Integer isShow) {
-        this.isShow = isShow;
+    public void setVisible(Integer visible) {
+        this.visible = visible;
     }
 
     public User getCreateUser() {

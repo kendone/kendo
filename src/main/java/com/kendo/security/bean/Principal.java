@@ -10,17 +10,16 @@ public class Principal implements Serializable {
 
     private static final long serialVersionUID = -3309242917851705670L;
 
-    private Long id;
+    private String id;
     private String name;
-    private String username;
     private String password;
     private List<PrincipalRole> roles;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -30,14 +29,6 @@ public class Principal implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getPassword() {

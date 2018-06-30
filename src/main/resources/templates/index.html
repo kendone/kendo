@@ -9,7 +9,10 @@
     <link rel="stylesheet" th:href="@{/vendor/kendo/styles/kendo.common.min.css}">
     <link rel="stylesheet" th:href="@{/vendor/kendo/styles/kendo.default.min.css}">
     <link rel="stylesheet" th:href="@{/css/kendo.common.css}">
-
+    <script th:inline="javascript">
+        var contextPath = /*[[${#servletContext.getContextPath()}]]*/ "";
+        console.log("contextPath", contextPath);
+    </script>
     <script th:src="@{/vendor/kendo/js/jquery.min.js}"></script>
     <script th:src="@{/vendor/kendo/js/kendo.all.min.js}"></script>
     <script th:src="@{/vendor/kendo/js/jszip.min.js}"></script>
@@ -17,6 +20,7 @@
     <script th:src="@{/vendor/kendo/js/cultures/kendo.culture.zh-CN.min.js}"></script>
 </head>
 <body>
+<!--<p th:text="${#servletContext.getContextPath()}"></p>-->
 <!-- OUTER SPLITTER -->
 <div id="outer-splitter">
     <!-- TOP REGION -->
@@ -83,7 +87,11 @@
     </div>
     <!-- BOTTOM REGION -->
     <footer>
-        <p>Activiti - 工作流引擎名称</p>
+        <p th:text="${#request.getContextPath()}"></p>
+        <p th:text="${#session.id}"></p>
+        <p th:text="${#session.lastAccessedTime}"></p>
+        <p th:text="${#servletContext.getContextPath()}"></p>
+        <p th:text="${#servletContext.contextPath}"></p>
     </footer>
 </div>
 
@@ -95,7 +103,6 @@
 
 <script th:src="@{/js/kendo.common.js}"></script>
 <script th:src="@{/js/kendo.core.js}"></script>
-<!--<script th:src="@{/js/kendo.task.js}"></script>-->
 
 <script type="text/x-kendo-template" id="template">
     <div class="toolbar" style="float:right;">

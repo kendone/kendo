@@ -25,11 +25,6 @@ var util = (function () {
         return fileName[fileName.length - 1];
     }
 
-    /**
-     * GET FILE POSTFIX NAME
-     * @param fileName
-     * @returns {*}
-     */
     function getFilePostfix(fileName) {
         if (!fileName) {
             throw new Error("file name must not be null");
@@ -40,11 +35,6 @@ var util = (function () {
         return fileName[fileName.length - 1];
     }
 
-    /**
-     * FILE SIZE(BIT) TO EASY READ STRING
-     * @param fileSize
-     * @returns {*}
-     */
     function sizeToStr(fileSize) {
         var fileSizeStr;
 

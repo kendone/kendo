@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kendo.admin.mapper.MenuItemMapper">
+<mapper namespace="com.kendo.admin.mapper.MenuWindowMapper">
 
     <!--  MENU ITEM RESULTMAP -->
 
-    <resultMap id="menuItemMap" type="menuItem">
+    <resultMap id="menuWindowMap" type="menuWindow">
         <id property="id" column="ID" jdbcType="INTEGER"/>
         <result property="name" column="NAME" jdbcType="VARCHAR"/>
         <result property="icon" column="ICON" jdbcType="VARCHAR"/>
@@ -17,8 +17,8 @@
         <result property="url_" column="WINDOW_URL" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <!-- MENU ITEM SELECT -->
-    <select id="selectMenuItemByMenuId" resultMap="menuItemMap" parameterType="java.util.Map">
+    <!-- MENU WINDOW SELECT -->
+    <select id="selectMenuWindowByMenuId" resultMap="menuWindowMap" parameterType="java.util.Map">
         SELECT DISTINCT
             menu.ID,
             menu.NAME,
@@ -33,21 +33,21 @@
         FROM menu
             JOIN role_menu rm
                 ON menu.ID = rm.MENU_ID
-                   AND menu.IS_VALID = 1
-                   AND menu.IS_SHOW = 1
+                   AND menu.ENABLED = 1
+                   AND menu.VISIBLE = 1
                    AND rm.ROLE_ID IN
                        (
                            SELECT DISTINCT r.ID
                            FROM role_user ru, role r
                            WHERE ru.ROLE_ID = r.ID
-                                 AND r.IS_VALID = 1
+                                 AND r.ENABLED = 1
                                  AND ru.USER_ID = #{userId,jdbcType=INTEGER}
                        )
             LEFT JOIN window
                 ON menu.WINDOW_ID = window.ID
-                   AND window.IS_VALID = 1
-                   AND window.IS_SHOW = 1
-        WHERE FIND_IN_SET(menu.ID,FN_GET_CHILD_BY_ID(#{menuId,jdbcType=INTEGER}))
+                   AND window.ENABLED = 1
+                   AND window.VISIBLE = 1
+        WHERE FIND_IN_SET(menu.ID, FN_GET_CHILD_BY_ID(#{menuId,jdbcType=INTEGER}))
     </select>
 
 </mapper>

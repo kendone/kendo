@@ -7,17 +7,16 @@ import java.io.Serializable;
  */
 public class User implements Serializable {
 
-    private static final long serialVersionUID = -3115833177509155278L;
-    private Long id;
+    private static final long serialVersionUID = -7238188192495618378L;
+    private String id;
     private String name;
-    private String username;
-    private String identicalName;//name(username)
+    private String username;//name(id)
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -35,13 +34,5 @@ public class User implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getIdenticalName() {
-        return identicalName;
-    }
-
-    public void setIdenticalName(String identicalName) {
-        this.identicalName = identicalName;
     }
 }

@@ -99,7 +99,7 @@ var common = (function ($) {
             );
     }
 
-    //密码编辑器
+    //editor for password editing
     function passwordEditor(container, options) {
         var
             field = options.field,
@@ -115,7 +115,7 @@ var common = (function ($) {
         editDom.appendTo(container);
     }
 
-    //人员下拉框编辑器
+    //editor for user editing
     function userEditor(container, options) {
         var
             field = options.field,
@@ -162,7 +162,7 @@ var common = (function ($) {
         }).data("kendoDropDownList");
     }
 
-    //部门下拉框编辑器
+    //editor for dept editing
     function deptEditor(container, options) {
         var
             field = options.field,
@@ -224,7 +224,7 @@ var common = (function ($) {
         });
     }
 
-    //岗位下拉框编辑器
+    //editor for post editing
     function postEditor(container, options) {
         var
             field = options.field,
@@ -281,7 +281,7 @@ var common = (function ($) {
         });
     }
 
-    //岗位等级下拉框编辑器
+    //editor for rank editing
     function rankEditor(container, options) {
         var
             field = options.field,
