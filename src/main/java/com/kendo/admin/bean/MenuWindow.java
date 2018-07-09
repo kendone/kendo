@@ -2,15 +2,18 @@ package com.kendo.admin.bean;
 
 import java.io.Serializable;
 
+/**
+ * @author kendone
+ */
 public class MenuWindow extends AbstractMenu implements Serializable {
     private static final long serialVersionUID = -7931927877381354570L;
 
-    //叶子菜单对应的窗口属性,不是叶子节点该属性为空
+    // window properties of the menu for opening the specified window
     private Long id_;
-    private String name_;//窗口名称
-    private String icon_;//窗口图标
-    private String model_;//系统模块
-    private String url_;//打开窗口的url
+    private String name_;
+    private String icon_;
+    private String model_;
+    private String url_;
 
     public Long getId() {
         return id;

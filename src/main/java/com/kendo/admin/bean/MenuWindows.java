@@ -3,6 +3,9 @@ package com.kendo.admin.bean;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author kendone
+ */
 public class MenuWindows extends MenuWindow {
     private static final long serialVersionUID = -339999134691329994L;
 

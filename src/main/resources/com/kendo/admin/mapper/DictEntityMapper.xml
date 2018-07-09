@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kendo.admin.mapper.DictEntityMapper">
+
+    <!-- DICT INSERT -->
+    <insert id="insertIgnoreNull" parameterType="dictEntity" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO dict
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="value!=null">VALUE,</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(text)">TEXT,</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(type)">TYPE,</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(info)">INFO,</if>
+            <if test="sort!=null">SORT,</if>
+            <if test="enabled!=null">ENABLED,</if>
+            <if test="createUser!=null">CREATE_ID,</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(remark)">REMARK</if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="value!=null">#{value,jdbcType=INTEGER},</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(text)">#{text,jdbcType=VARCHAR},</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(type)">#{type,jdbcType=VARCHAR},</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(info)">#{info,jdbcType=VARCHAR},</if>
+            <if test="sort!=null">#{sort,jdbcType=INTEGER},</if>
+            <if test="enabled!=null">#{enabled,jdbcType=INTEGER},</if>
+            <if test="createUser!=null">#{createUser.id,jdbcType=VARCHAR},</if>
+            <if test="@com.kendo.util.StringUtil@isNotEmpty(remark)">REMARK = #{remark,jdbcType=VARCHAR}</if>
+        </trim>
+    </insert>
+
+    <!-- DICT UPDATE -->
+    <update id="update" parameterType="dictEntity">
+        UPDATE dict
+        <trim prefix="SET ">
+            VALUE = #{value,jdbcType=INTEGER},
+            TEXT = #{text,jdbcType=VARCHAR},
+            TYPE = #{type,jdbcType=VARCHAR},
+            INFO = #{info,jdbcType=VARCHAR},
+            SORT = #{sort,jdbcType=INTEGER},
+            ENABLED = #{enabled,jdbcType=INTEGER},
+            UPDATE_ID = #{updateUser.id,jdbcType=VARCHAR},
+            UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+            REMARK = #{remark,jdbcType=VARCHAR}
+        </trim>
+        WHERE ID = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!-- DICT DELETE -->
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        DELETE FROM dict
+        WHERE ID = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <!-- DICT RESULTMAP -->
+    <resultMap id="dictResultMap" type="dictEntity">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="VALUE" jdbcType="INTEGER" property="value"/>
+        <result column="TEXT" jdbcType="VARCHAR" property="text"/>
+        <result column="TYPE" jdbcType="VARCHAR" property="type"/>
+        <result column="INFO" jdbcType="VARCHAR" property="info"/>
+        <result column="SORT" jdbcType="INTEGER" property="sort"/>
+        <result column="ENABLED" jdbcType="INTEGER" property="enabled"/>
+        <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="REMARK" jdbcType="VARCHAR" property="remark"/>
+        <association property="createUser" column="CREATE_ID" javaType="user" columnPrefix="CREATE_">
+            <id property="id" column="ID" jdbcType="VARCHAR"/>
+            <result property="name" column="NAME" jdbcType="VARCHAR"/>
+        </association>
+        <association property="updateUser" column="UPDATE_ID" javaType="user" columnPrefix="UPDATE_">
+            <id property="id" column="ID" jdbcType="VARCHAR"/>
+            <result property="name" column="NAME" jdbcType="VARCHAR"/>
+        </association>
+    </resultMap>
+
+    <!-- DICT SELECT -->
+    <select id="selectAll" resultMap="dictResultMap">
+        SELECT
+            dict.ID,
+            dict.VALUE,
+            dict.TEXT,
+            dict.TYPE,
+            dict.INFO,
+            dict.SORT,
+            dict.ENABLED,
+            dict.CREATE_ID,
+            create_user.NAME AS CREATE_NAME,
+            dict.CREATE_TIME,
+            dict.UPDATE_ID,
+            update_user.NAME AS UPDATE_NAME,
+            dict.UPDATE_TIME,
+            dict.REMARK
+        FROM dict
+            LEFT JOIN user create_user
+                ON dict.CREATE_ID = create_user.ID
+            LEFT JOIN user update_user
+                ON dict.UPDATE_ID = update_user.ID
+        ORDER BY TYPE DESC, SORT
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="dictResultMap">
+        SELECT
+            dict.ID,
+            dict.VALUE,
+            dict.TEXT,
+            dict.TYPE,
+            dict.INFO,
+            dict.SORT,
+            dict.ENABLED,
+            dict.CREATE_ID,
+            create_user.NAME AS CREATE_NAME,
+            dict.CREATE_TIME,
+            dict.UPDATE_ID,
+            update_user.NAME AS UPDATE_NAME,
+            dict.UPDATE_TIME,
+            dict.REMARK
+        FROM dict
+            LEFT JOIN user create_user
+                ON dict.CREATE_ID = create_user.ID
+            LEFT JOIN user update_user
+                ON dict.UPDATE_ID = update_user.ID
+        WHERE dict.ID = #{id,jdbcType=INTEGER}
+    </select>
+</mapper>

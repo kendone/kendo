@@ -14,14 +14,14 @@ public class Menu extends AbstractMenu implements Serializable {
 
     private String label;
     private String permission;
-    private String expanded;//菜单展开状态true展开null/false不展开
-    private Integer isLeaf;//叶子节点1是0不是
-    private Integer enabled;//菜单状态1有效0无效
-    private Integer visible;//是否显示1显示0隐藏
-    private User createUser;//创建人
-    private Date createTime;//创建时间
-    private String remark;//备注
-    private Window window;//打开窗口对象
+    private String expanded;
+    private Integer isLeaf;
+    private Integer enabled;
+    private Integer visible;
+    private User createUser;
+    private Date createTime;
+    private String remark;
+    private Window window;
 
     public Long getId() {
         return id;

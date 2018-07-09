@@ -56,7 +56,7 @@ public class PostEntityController {
             items.add(post);
             resultMap.put("items", items);
         } else {
-            resultMap.put("error", "更新失败");
+            resultMap.put("error", "error");
         }
         return resultMap;
     }

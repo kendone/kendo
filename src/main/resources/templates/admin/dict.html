@@ -1,0 +1,169 @@
+<div id="admin-dict-grid" style="height: 100%;"></div>
+
+<script>
+    $(function () {
+        var adminDict = (function () {
+            var init,
+                model,
+                dataSource,
+                columns,
+                $grid,
+                grid;
+
+            model = kendo.data.Model.define({
+                id: "id",
+                fields: {
+                    id: {type: "number", editable: false, nullable: true},
+                    value: {type: "number", validation: {required: true}, defaultValue: 1},
+                    text: {validation: {required: true}},
+                    type: {validation: {required: true}},
+                    info: {validation: {required: true}},
+                    sort: {type: "number", validation: {min: 1}, defaultValue: 1},
+                    enabled: {type: "number", validation: {min: 0, max: 1}, defaultValue: 1},
+                    createUser: {
+                        type: 'object',
+                        editable: false,
+                        nullable:false,
+                        defaultValue: {id: "kendo", name: 'kendo'}
+                    },
+                    createTime: {type: "date", editable: false, nullable: true},
+                    updateUser: {type: "object", editable: false, nullable: true},
+                    updateTime: {type: "date", editable: false, nullable: true},
+                    remark: {nullable: true}
+                }
+            });
+
+            dataSource = new kendo.data.DataSource({
+                transport: {
+                    create: {
+                        type: "POST",
+                        url: contextPath + "/admin/dict/create",
+                        contentType: "application/json"
+                    },
+                    read: {
+                        type: "GET",
+                        url: contextPath + "/admin/dict/read",
+                        contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                        dataType: "json"
+                    },
+                    destroy: {
+                        type: "DELETE",
+                        url: contextPath + "/admin/dict/destroy",
+                        contentType: "application/json",
+                        dataType: "json"
+                    },
+                    update: {
+                        type: "PUT",
+                        url: contextPath + "/admin/dict/update",
+                        contentType: "application/json",
+                        dataType: "json"
+                    },
+                    parameterMap: function (options, operation) {
+                        if (operation === "read") {
+                            return {page: options.page, pageSize: options.pageSize};
+                        } else if (operation === "create" || operation === "update" || operation === "destroy") {
+                            if (options.createTime) {
+                                options.createTime = kendo.toString(options.createTime, common.convention.dateTimeFormat);
+                            }
+                            return kendo.stringify(options);
+                        }
+                    }
+                },
+                schema: {
+                    model: model,
+                    data: "items",
+                    total: "itemCount",
+                    errors: "error"
+                },
+                error: function (e) {
+                    var error;
+
+                    if (e && e.xhr && e.xhr.responseText) {
+                        error = JSON.parse(e.xhr.responseText);
+                        kendo.alert(error.error ? error.error : e.status);
+                    }
+                },
+                serverPaging: true,
+                pageSize: 14
+            });
+
+            columns = [
+                {field: "id", title: "ID", width: 60, attributes: common.config.ALIGNCENTER, hidden: true},
+                {
+                    field: "value",
+                    title: "数据值",
+                    width: 80,
+                    format: "{0:#}",
+                    attributes: common.config.ALIGNCENTER,
+                    menu: false
+                },
+                {field: "text", title: "数据名称", width: 120},
+                {field: "type", title: "类型", width: 120},
+                {field: "info", title: "描述"},
+                {field: "sort", title: "排序", width: 80, format: "{0:#}", attributes: common.config.ALIGNCENTER},
+                {
+                    field: "enabled",
+                    title: "是否有效",
+                    width: 80,
+                    values: [{value: 1, text: "有效"}, {value: 0, text: "无效"}],
+                    attributes: common.config.ALIGNCENTER
+                },
+                {
+                    field: "createUser",
+                    title: "创建人",
+                    width: 120,
+                    template: '#if(createUser){# #=createUser.name# #}#',
+                    attributes: common.config.ALIGNCENTER
+                },
+                {
+                    field: "createTime",
+                    title: "创建时间",
+                    width: 120,
+                    format: common.convention.kDateFormat,
+                    attributes: common.config.ALIGNCENTER
+                },
+                {
+                    field: "updateUser",
+                    title: "修改人",
+                    width: 120,
+                    template: "#if(updateUser){# #=updateUser.name# #}#",
+                    attributes: common.config.ALIGNCENTER
+                },
+                {
+                    field: "updateTime",
+                    title: "修改时间",
+                    width: 120,
+                    format: common.convention.kDateFormat,
+                    attributes: common.config.ALIGNCENTER
+                },
+                {field: "remark", title: "备注", width: 100},
+                {command: ["edit", "destroy"], width: 150}
+            ];
+
+            $grid = $("#admin-dict-grid");
+
+            init = function () {
+                //INIT GRID
+                $grid.kendoGrid({
+                    editable: {
+                        mode: 'inline',
+                        confirmation: true,
+                        createAt: "top",
+                        destroy: true,
+                        update: true
+                    },
+                    columns: columns,
+                    toolbar: ["create"],
+                    dataSource: dataSource,
+                    pageable: common.config.PAGEABLE
+                });
+                //GET GRID REFERENCE
+                grid = $grid.data("kendoGrid");
+            };
+
+            return {init: init}
+        })();
+
+        adminDict.init();
+    });
+</script>
