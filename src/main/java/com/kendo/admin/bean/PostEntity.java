@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * @author kendone
  */
-public class PostEntity implements Serializable{
+public class PostEntity implements Serializable {
     private static final long serialVersionUID = 8427138354964084251L;
 
     private Long id;
