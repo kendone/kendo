@@ -1,7 +1,7 @@
 $(function () {
     var loginModel = kendo.observable({
             username: "kendo",
-            password: "",
+            password: "kendo",
             rememberMe: true,
 
             init: function () {
