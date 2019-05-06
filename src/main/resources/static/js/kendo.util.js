@@ -18,10 +18,9 @@ var util = (function () {
 
     function getFileName(fileName) {
         if (!fileName || !/(\\+)$/.test(fileName)) {
-            throw new Error("file name must be valid");
+            throw new Error("File name is invalid");
         }
         fileName = fileName.split("/");
-
         return fileName[fileName.length - 1];
     }
 
@@ -29,9 +28,7 @@ var util = (function () {
         if (!fileName) {
             throw new Error("file name must not be null");
         }
-
         fileName = fileName.split(".");
-
         return fileName[fileName.length - 1];
     }
 
@@ -39,9 +36,7 @@ var util = (function () {
         var fileSizeStr;
 
         fileSize = parseFloat(fileSize);
-
         if (isNaN(fileSize)) return "";
-
         if (fileSize < SIZE.B) {
             fileSizeStr = fileSize.toFixed(2) + "B";
         } else if (fileSize < SIZE.KB) {
